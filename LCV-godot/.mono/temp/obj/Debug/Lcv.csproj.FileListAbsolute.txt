@@ -1,0 +1,9 @@
+A:\Gamedev\Projects\In-Progress\lcv-bitbucket\LCV-godot\.mono\temp\obj\Debug\Lcv.csproj.AssemblyReference.cache
+A:\Gamedev\Projects\In-Progress\lcv-bitbucket\LCV-godot\.mono\temp\obj\Debug\Lcv.GeneratedMSBuildEditorConfig.editorconfig
+A:\Gamedev\Projects\In-Progress\lcv-bitbucket\LCV-godot\.mono\temp\obj\Debug\Lcv.AssemblyInfoInputs.cache
+A:\Gamedev\Projects\In-Progress\lcv-bitbucket\LCV-godot\.mono\temp\obj\Debug\Lcv.AssemblyInfo.cs
+A:\Gamedev\Projects\In-Progress\lcv-bitbucket\LCV-godot\.mono\temp\obj\Debug\Lcv.csproj.CoreCompileInputs.cache
+A:\Gamedev\Projects\In-Progress\lcv-bitbucket\LCV-godot\.mono\temp\bin\Debug\Lcv.dll
+A:\Gamedev\Projects\In-Progress\lcv-bitbucket\LCV-godot\.mono\temp\bin\Debug\Lcv.pdb
+A:\Gamedev\Projects\In-Progress\lcv-bitbucket\LCV-godot\.mono\temp\obj\Debug\Lcv.dll
+A:\Gamedev\Projects\In-Progress\lcv-bitbucket\LCV-godot\.mono\temp\obj\Debug\Lcv.pdb
