@@ -17,13 +17,24 @@ public class MapController : Node
 		//map size/etc info will go here
 		GD.Print("Printing the Hexagons");
 		//foreach hex etc.
-		DrawHex(0,0);
+		Vector2 hexPos;
+		hexPos.x = 0;
+		hexPos.y = 0;
+		DrawHex(hexPos);
 		GD.Print("Done");
 	}
 	
-	public void DrawHex(int xPos, int yPos)
+	public void DrawHex(Vector2 a)
 	{
-		GD.Print("Drew hex at ("+ xPos +","+ yPos +")");
+		int i = 0;
+		int angle_deg = 60 * i;
+		float angle_rad = Mathf.Pi * angle_deg / 180;
+		/* hold on
+		for (i = 0; i < 5; i++) {
+			lineDrawer.set_points(i) = 
+		
+		}*/
+		GD.Print("Drew hex at ("+ a.x +","+ a.y +")");
 	}
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
 //  public override void _Process(float delta)
