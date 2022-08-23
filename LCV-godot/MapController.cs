@@ -1,47 +1,47 @@
 using Godot;
 using System;
-
+using System.Collections.Generic;
 
 public class MapController : Node
 {
 	// Declare member variables here. Examples:
 	// private int a = 2;
 	// private string b = "text";
-	private Line2D lineDrawer; //can't call Functions in this space; it has to be within another function
+	PackedScene hexRef;
+	Node[,] mapCell;
+	Vector2 gridStart;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		lineDrawer = GetNode<Line2D>("CellLine"); //RE line10: like here
-		//lineDrawer.EndCapMode = enum LineCapMode 1;
-		
-		//in all likelihood, the rest of this function will eventually be triggered by a Signal
+		hexRef = GD.Load<PackedScene>("res://Hexagon.tscn");
 		//map size/etc info will go here
-		GD.Print("Printing the Hexagons");
-		//foreach hex etc.
-		Vector2 hexPos;
-		hexPos.x = 200;
-		hexPos.y = 200;
-		DrawHex(hexPos,30);
-		GD.Print("Done");
+		int q = 5;
+		int r = 5;
+		mapCell = new Node[q,r];
+		
+		GD.Print("Printing a hex map that is " + q + " units along the q axis, and " + r + " units along the r axis.");
+		
+		
+		gridStart.x = 200;
+		gridStart.y = 200;
+		DrawMap(gridStart,q,r);
+		GD.Print("Done"); //TODO: make this message play via a Signal saying that the map is done
 	}
 	
-	public void DrawHex(Vector2 center, float size)
+	public void DrawMap(Vector2 origin, int q, int r)
 	{
-		int angleDeg; 
-		float angleRad;
-		Vector2 vertex;
-		for (int i = 0; i <= 6; i++) {
-			angleDeg = 60 * i;
-			angleRad = Mathf.Pi * angleDeg / 180;
-			vertex.x = center.x + size * Mathf.Cos(angleRad);
-			vertex.y = center.y + size * Mathf.Sin(angleRad);
-			lineDrawer.AddPoint(vertex, i);
+		for (int a = 0; a < q; a++)
+		{
+			for (int b = 0; b < r; b++)
+			{ 
+				var thisHex = hexRef.Instance<Hex>();
+				AddChild(thisHex);
+				mapCell[a,b] = thisHex;
+				// "res://" means "look for a RESOURCE inside the project file."
+				thisHex.DrawHex(origin);
+				GD.Print(a+","+b);
+			}
 		}
-		GD.Print("Drew hex at ("+ center.x +","+ center.y +")");
+		
 	}
-//  // Called every frame. 'delta' is the elapsed time since the previous frame.
-//  public override void _Process(float delta)
-//  {
-//      
-//  }
 }
