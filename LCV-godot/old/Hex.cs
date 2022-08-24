@@ -4,7 +4,7 @@ using System;
 public class Hex : Node2D
 {
 	private Line2D lineDrawer; //can't call Functions in this space; it has to be within another function
-	float circumradius = 30;
+	float circumradius = 30; //just nice to have a default
 	
 	public void DrawHex(Vector2 center)
 	{
