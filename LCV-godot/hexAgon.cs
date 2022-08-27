@@ -1,26 +1,28 @@
 using Godot;
 using System;
 
-public class hexAgon : Node //Is the hexagons.
+public class hexAgon : Node //Is the hexagons. 
 {
 	protected int q; //q coordinate
 	protected int r; //r coordinate
 	protected int s; //s coordinate
-	public void setup (int a, int b, int c)
+	//remember 60 degrees is pi/3.
+	
+	public void Setup (int a, int b, int c)
 	{
 		q = a;
 		r = b;
 		s = c;
 	}
-	public int getQ()
+	public int GetQ()
 	{
 		return q;
 	}
-	public int getR()
+	public int GetR()
 	{
 		return r;
 	}
-	public int getS()
+	public int GetS()
 	{
 		return s;
 	}
