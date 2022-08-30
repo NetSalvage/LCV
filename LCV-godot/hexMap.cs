@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class hexMap : Node //Tracks all of the hexagons. Does hexagon-map math to determine how the hexagons are interacting.
+public class hexMap : Node //Tracks all of the hexagons. Does hexagon-map math to determine how the hexagons are interacting. All calculations use Cube Coordinates.
 {
 	PackedScene hexRef;
 
@@ -53,8 +53,20 @@ public class hexMap : Node //Tracks all of the hexagons. Does hexagon-map math t
 		return (hexResult);
 	}
 
-//hex map math goes here
-//only need q and r for position, but we need s for math
-//q+r+s = 0, that's all
-
+	public hexAgon SubtractHexes(hexAgon hex1, hexAgon hex2) //hex1 - hex2
+	{
+		hexAgon hexResult = new hexAgon();
+		hexResult.Setup( hex1.GetQ()-hex2.GetQ(), hex1.GetR()-hex2.GetR(), hex1.GetS()-hex2.GetS() );
+		
+		return (hexResult);
+	}
+	
+	public int hexDistance(hexAgon hex1, hexAgon hex2)
+	{
+		hexAgon hexResult = SubtractHexes(hex1,hex2);
+		int distance = Math.Max(hexResult.GetQ(),hexResult.GetR());
+		return (Math.Max(distance,hexResult.GetS()));
+	}
+	
+	//public char hexFacing(hexAgon hex1, hexAgon hex2)
 }

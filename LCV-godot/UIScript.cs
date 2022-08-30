@@ -15,21 +15,22 @@ public class UIScript : Node2D
 	{
 		if (Input.IsActionPressed("ui_left"))
 		{
-			thisCam.Position += Vector2.Left * 100 * delta;
+			thisCam.Position += Vector2.Left * 1000 * delta;
 		}
 		else if (Input.IsActionPressed("ui_right"))
 		{
-			thisCam.Position += Vector2.Right * 100 * delta;
+			thisCam.Position += Vector2.Right * 1000 * delta;
 		}
 		
 		if (Input.IsActionPressed("ui_down"))
 		{
-			thisCam.Position += Vector2.Down * 100 * delta;
+			thisCam.Position += Vector2.Down * 1000 * delta;
 		}
 		else if (Input.IsActionPressed("ui_up"))
 		{
-			thisCam.Position += Vector2.Up * 100 * delta;
+			thisCam.Position += Vector2.Up * 1000 * delta;
 		}
+		
 		
 	}
 }
