@@ -4,7 +4,10 @@ using System.Collections.Generic;
 
 public class hexMap : Node //Tracks all of the hexagons. Does hexagon-map math to determine how the hexagons are interacting. All calculations use Cube Coordinates.
 {
+	/*NOTE: for now, hex maps will be saved and loaded as .tscn files, as per the intended Godot architecture.
+	Because of this, any needed hexLayout code will be added to this script.*/
 	PackedScene hexRef;
+	//[Signal] delegate void mapPressed
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -30,7 +33,7 @@ public class hexMap : Node //Tracks all of the hexagons. Does hexagon-map math t
 		hexList.Add(hexagon1);
 		hexList.Add(hexagon2);
 		hexList.Add(hexagon3);
-		thisLayout.DrawMap(hexList);
+		
 	}
 	
 	public bool IsEqual(hexAgon hex1, hexAgon hex2)

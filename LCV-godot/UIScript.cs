@@ -13,6 +13,12 @@ public class UIScript : Node2D
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(float delta)
 	{
+		InputCheck(delta);
+	}
+	
+	void InputCheck(float delta)
+	{
+		//camera movement
 		if (Input.IsActionPressed("ui_left"))
 		{
 			thisCam.Position += Vector2.Left * 1000 * delta;
@@ -30,7 +36,12 @@ public class UIScript : Node2D
 		{
 			thisCam.Position += Vector2.Up * 1000 * delta;
 		}
-		
-		
+
+		//get hexmap info
+		if (Input.IsActionPressed("mouse1_pressed"))
+		{
+			//check for UI elements being pressed, first. If not:
+			EmitSignal("map_clicked");
+		}
 	}
 }
