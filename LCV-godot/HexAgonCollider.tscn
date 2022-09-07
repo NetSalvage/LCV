@@ -1,0 +1,5 @@
+[gd_scene format=2]
+
+[node name="HexAgonCollider" type="CollisionPolygon2D"]
+position = Vector2( -549, -183 )
+polygon = PoolVector2Array( 53, 0, 26, 45, -27, 45, -52, 0, -26, -46, 26, -46 )

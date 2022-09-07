@@ -71,5 +71,7 @@ public class hexMap : Node //Tracks all of the hexagons. Does hexagon-map math t
 		return (Math.Max(distance,hexResult.GetS()));
 	}
 	
+	
+	
 	//public char hexFacing(hexAgon hex1, hexAgon hex2)
 }
