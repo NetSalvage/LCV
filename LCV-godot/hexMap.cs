@@ -13,7 +13,6 @@ public class hexMap : Node //Tracks all of the hexagons. Does hexagon-map math t
 	public override void _Ready()
 	{
 		hexRef = GD.Load<PackedScene>("res://HexAgon.tscn");
-		var thisLayout = GetNode<hexLayout>("LayoutNode");
 				//gonna test everything i've written so far
 		var hexagon1 = hexRef.Instance<hexAgon>();
 		hexagon1.Setup (1,2,-3);
