@@ -4,10 +4,26 @@ using System;
 public class UIScript : Node2D
 {
 	Camera2D thisCam;
+	Label hexCoordsLabel;
+	
+	[Signal]
+	public delegate void MapClicked (Vector2 mousePos);
+	
 	public override void _Ready()
 	{
 		thisCam = GetNode<Camera2D>("UserCam");
 		thisCam.MakeCurrent();
+		hexCoordsLabel = GetNode<Label>("UserCam/InfoWindow/InfoWindowLabel"); //whew, lol. TODO: ask myself when and why I'm using signals.
+	}
+
+	//things that should happen only on press
+	public override void _Input(InputEvent inputEvent)
+	{
+		if (inputEvent.IsActionPressed("mouse1_pressed"))
+		{
+			//check for UI elements being pressed, first. If not:
+			this.EmitSignal("MapClicked", GetGlobalMousePosition());
+		}
 	}
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -36,12 +52,11 @@ public class UIScript : Node2D
 		{
 			thisCam.Position += Vector2.Up * 1000 * delta;
 		}
-
-		//get hexmap info
-		if (Input.IsActionPressed("mouse1_pressed"))
-		{
-			//check for UI elements being pressed, first. If not:
-			EmitSignal("map_clicked");
-		}
 	}
+
+	void OnCoordsReceived (Vector2 hexCoords)
+	{
+		hexCoordsLabel.SetText("(" + hexCoords.x + " " + hexCoords.y + ")");
+	}
+
 }

@@ -4,15 +4,21 @@ using System.Collections.Generic;
 
 public class hexMap : Node //Tracks all of the hexagons. Does hexagon-map math to determine how the hexagons are interacting. All calculations use Cube Coordinates.
 {
-	/*NOTE: for now, hex maps will be saved and loaded as .tscn files, as per the intended Godot architecture.
-	Because of this, any needed hexLayout code will be added to this script.*/
+	/*NOTE: A bunch of this is deprecated.*/
 	PackedScene hexRef;
-	//[Signal] delegate void mapPressed
-
-	// Called when the node enters the scene tree for the first time.
+	TileMap thisTileMap;
+	Node2D thisUINode;
+	
+	[Signal]
+	public delegate void HexCoords (Vector2 hexCoords);
+	
 	public override void _Ready()
 	{
 		hexRef = GD.Load<PackedScene>("res://HexAgon.tscn");
+		thisTileMap = GetNode<TileMap>("BGTileMap");
+		thisUINode = GetNode<Node2D>("UIRN");
+		thisUINode.Connect("MapClicked", this, "OnMapClicked"); //TheThingYouWantToConnect.Connect("SignalString", targetInstance, targetMethod)
+		this.Connect("HexCoords", thisUINode, "OnCoordsReceived");
 				//gonna test everything i've written so far
 		var hexagon1 = hexRef.Instance<hexAgon>();
 		hexagon1.Setup (1,2,-3);
@@ -70,7 +76,10 @@ public class hexMap : Node //Tracks all of the hexagons. Does hexagon-map math t
 		return (Math.Max(distance,hexResult.GetS()));
 	}
 	
-	
-	
-	//public char hexFacing(hexAgon hex1, hexAgon hex2)
+	private void OnMapClicked(Vector2 mousePos)
+	{
+		//TODO: find a way to suss out the context in which the map is being clicked, so you can signal the right methods (???)
+		this.EmitSignal("HexCoords", thisTileMap.WorldToMap(mousePos));
+	}
+
 }
