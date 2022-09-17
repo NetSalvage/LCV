@@ -13,8 +13,9 @@ anchor_left = 0.05
 anchor_top = 0.2
 anchor_right = 0.95
 anchor_bottom = 0.95
-text = "Arrow keys: Pan around the map.
+text = "Arrow keys or ESDF: Pan around the map.
 Primary mouse button: Select a hex.
+ESC: Cancel. (Backs out of things sequentially.)
 F1 again: close this help window."
 align = 1
 valign = 1

@@ -45,5 +45,13 @@ align = 1
 valign = 1
 autowrap = true
 
-[node name="HelpWindowScene" parent="UserCam/UserCanvasLayer" instance=ExtResource( 2 )]
+[node name="Windows" type="Node" parent="UserCam/UserCanvasLayer"]
+
+[node name="HelpWindowScene" parent="UserCam/UserCanvasLayer/Windows" instance=ExtResource( 2 )]
+layer = 2
 visible = false
+
+[connection signal="mouse_entered" from="UserCam/UserCanvasLayer/BottomRightWindow" to="." method="OnMouseInUI"]
+[connection signal="mouse_exited" from="UserCam/UserCanvasLayer/BottomRightWindow" to="." method="OnMouseOutUI"]
+[connection signal="mouse_entered" from="UserCam/UserCanvasLayer/TopRightWindow" to="." method="OnMouseInUI"]
+[connection signal="mouse_exited" from="UserCam/UserCanvasLayer/TopRightWindow" to="." method="OnMouseOutUI"]
