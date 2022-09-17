@@ -415,19 +415,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Ogres\\.nuget\\packages\\": {}
+    "C:\\Users\\youig\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "A:\\Gamedev\\Projects\\In-Progress\\lcv-bitbucket\\LCV-godot\\Lcv.csproj",
+      "projectUniqueName": "C:\\Users\\youig\\LCV Bitbucket\\LCV-godot\\Lcv.csproj",
       "projectName": "Lcv",
-      "projectPath": "A:\\Gamedev\\Projects\\In-Progress\\lcv-bitbucket\\LCV-godot\\Lcv.csproj",
-      "packagesPath": "C:\\Users\\Ogres\\.nuget\\packages\\",
-      "outputPath": "A:\\Gamedev\\Projects\\In-Progress\\lcv-bitbucket\\LCV-godot\\.mono\\temp\\obj\\",
+      "projectPath": "C:\\Users\\youig\\LCV Bitbucket\\LCV-godot\\Lcv.csproj",
+      "packagesPath": "C:\\Users\\youig\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\youig\\LCV Bitbucket\\LCV-godot\\.mono\\temp\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Ogres\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\youig\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net472"
@@ -458,7 +458,7 @@
             "autoReferenced": true
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
       }
     }
   }

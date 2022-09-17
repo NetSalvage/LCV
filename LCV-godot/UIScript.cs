@@ -5,6 +5,7 @@ public class UIScript : Node2D
 {
 	Camera2D thisCam;
 	Label hexCoordsLabel;
+	CanvasLayer helpWindow;
 	
 	[Signal]
 	public delegate void MapClicked (Vector2 mousePos);
@@ -13,17 +14,24 @@ public class UIScript : Node2D
 	{
 		thisCam = GetNode<Camera2D>("UserCam");
 		thisCam.MakeCurrent();
-		hexCoordsLabel = GetNode<Label>("UserCam/InfoWindow/InfoWindowLabel"); //whew, lol. TODO: ask myself when and why I'm using signals.
+		hexCoordsLabel = GetNode<Label>("UserCam/UserCanvasLayer/BottomRightWindow/BottomRightLabel"); //whew, lol.
+		helpWindow = GetNode<CanvasLayer>("UserCam/UserCanvasLayer/HelpWindowScene");
 	}
 
 	//things that should happen only on press
 	public override void _Input(InputEvent inputEvent)
 	{
-		if (inputEvent.IsActionPressed("mouse1_pressed"))
+		if (inputEvent.IsActionPressed("choose_0"))
 		{
 			//check for UI elements being pressed, first. If not:
 			this.EmitSignal("MapClicked", GetGlobalMousePosition());
 		}
+		
+		if (inputEvent.IsActionPressed("ui_help"))
+		{
+			helpWindow.SetVisible(!helpWindow.IsVisible());
+		}
+
 	}
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -56,7 +64,7 @@ public class UIScript : Node2D
 
 	void OnCoordsReceived (Vector2 hexCoords)
 	{
-		hexCoordsLabel.SetText("(" + hexCoords.x + " " + hexCoords.y + ")");
+		hexCoordsLabel.SetText("(" + hexCoords.x + "," + hexCoords.y + ")");
 	}
 
 }

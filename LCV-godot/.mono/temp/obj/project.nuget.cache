@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "lpq5xvrp7D00HuggT6vmI8JFrGkass+h0XwsxMvKndQdqw/uCUpXK94gcAB2asbnBC44lofjEGrPpjZrGyOUsw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\youig\\LCV Bitbucket\\LCV-godot\\Lcv.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\youig\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.2\\microsoft.netframework.referenceassemblies.1.0.2.nupkg.sha512",
+    "C:\\Users\\youig\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net472\\1.0.2\\microsoft.netframework.referenceassemblies.net472.1.0.2.nupkg.sha512"
+  ],
+  "logs": []
+}

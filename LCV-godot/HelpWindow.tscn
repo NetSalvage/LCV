@@ -1,0 +1,29 @@
+[gd_scene format=2]
+
+[node name="HelpWindowScene" type="CanvasLayer"]
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+anchor_left = 0.01
+anchor_top = 0.01
+anchor_right = 0.99
+anchor_bottom = 0.99
+
+[node name="Controls" type="Label" parent="."]
+anchor_left = 0.05
+anchor_top = 0.2
+anchor_right = 0.95
+anchor_bottom = 0.95
+text = "Arrow keys: Pan around the map.
+Primary mouse button: Select a hex.
+F1 again: close this help window."
+align = 1
+valign = 1
+
+[node name="Title" type="Label" parent="."]
+anchor_left = 0.05
+anchor_top = 0.05
+anchor_right = 0.95
+anchor_bottom = 0.2
+text = "Controls"
+align = 1
+valign = 1
