@@ -6,7 +6,7 @@ public class UIScript : Node2D
 {
 	Camera2D thisCam;
 	CanvasLayer helpWindow;
-	Label hexCoordsLabel;
+	Label offsetCoordsLabel;
 	List<Vector2> selectedHex;
 	bool mouseInUI;
 	bool windowsOpen;
@@ -18,7 +18,7 @@ public class UIScript : Node2D
 	{
 		thisCam = GetNode<Camera2D>("UserCam");
 		thisCam.MakeCurrent();
-		hexCoordsLabel = GetNode<Label>("UserCam/UserCanvasLayer/BottomRightWindow/BottomRightLabel"); //whew, lol.
+		offsetCoordsLabel = GetNode<Label>("UserCam/UserCanvasLayer/BottomRightWindow/BottomRightLabel"); //whew, lol.
 		helpWindow = GetNode<CanvasLayer>("UserCam/UserCanvasLayer/Windows/HelpWindowScene");
 		selectedHex = new List<Vector2>();
 	}
@@ -78,18 +78,18 @@ public class UIScript : Node2D
 		}
 	}
 
-	void OnCoordsReceived (Vector2 hexCoords)
+	void OnCoordsReceived (Vector2 offsetCoords)
 	{
 		if (selectedHex.Count < 1)
 		{
-			selectedHex.Add(hexCoords);
-			hexCoordsLabel.SetText	("(" + selectedHex[0].x + "," + selectedHex[0].x + ")");
+			selectedHex.Add(offsetCoords);
+			offsetCoordsLabel.SetText	("(" + selectedHex[0].x + "," + selectedHex[0].y + ")");
 		}
 		else if (selectedHex.Count < 2)
 		{
-			selectedHex.Add(hexCoords);
-			hexCoordsLabel.SetText	("(" + selectedHex[0].x + "," + selectedHex[0].x + ")" + '\n' 
-									+"(" + selectedHex[1].x + "," + selectedHex[1].x + ")");
+			selectedHex.Add(offsetCoords);
+			offsetCoordsLabel.SetText	("(" + selectedHex[0].x + "," + selectedHex[0].y + ")" + '\n' 
+									+"(" + selectedHex[1].x + "," + selectedHex[1].y + ")");
 		}
 	}
 	
@@ -101,7 +101,7 @@ public class UIScript : Node2D
 		{
 			selectedHex.RemoveAt(0);
 		}
-		hexCoordsLabel.SetText	("Clicked hex coordinates go here.");
+		offsetCoordsLabel.SetText	("Clicked hex coordinates go here.");
 	}
 
 	//These two functions are connected to various UI elements through Godot's interface, for my own sanity:

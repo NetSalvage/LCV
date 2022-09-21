@@ -1,0 +1,9 @@
+C:\Users\youig\LCV Bitbucket\LCV-godot\.mono\temp\bin\ExportDebug\Lcv.dll
+C:\Users\youig\LCV Bitbucket\LCV-godot\.mono\temp\bin\ExportDebug\Lcv.pdb
+C:\Users\youig\LCV Bitbucket\LCV-godot\.mono\temp\obj\ExportDebug\Lcv.csproj.AssemblyReference.cache
+C:\Users\youig\LCV Bitbucket\LCV-godot\.mono\temp\obj\ExportDebug\Lcv.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\youig\LCV Bitbucket\LCV-godot\.mono\temp\obj\ExportDebug\Lcv.AssemblyInfoInputs.cache
+C:\Users\youig\LCV Bitbucket\LCV-godot\.mono\temp\obj\ExportDebug\Lcv.AssemblyInfo.cs
+C:\Users\youig\LCV Bitbucket\LCV-godot\.mono\temp\obj\ExportDebug\Lcv.csproj.CoreCompileInputs.cache
+C:\Users\youig\LCV Bitbucket\LCV-godot\.mono\temp\obj\ExportDebug\Lcv.dll
+C:\Users\youig\LCV Bitbucket\LCV-godot\.mono\temp\obj\ExportDebug\Lcv.pdb

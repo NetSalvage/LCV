@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "Px9tFJ23Eq5b8MHUJ5kLMeApIzkbW/GN06Xzmf+1v0vkPunvUaUsAVnxP0yj6rXVFzYEA+uX9IHNos+OewsvMg==",
+  "dgSpecHash": "lpq5xvrp7D00HuggT6vmI8JFrGkass+h0XwsxMvKndQdqw/uCUpXK94gcAB2asbnBC44lofjEGrPpjZrGyOUsw==",
   "success": true,
-  "projectFilePath": "A:\\Gamedev\\Projects\\In-Progress\\lcv-bitbucket\\LCV-godot\\Lcv.csproj",
+  "projectFilePath": "C:\\Users\\youig\\LCV Bitbucket\\LCV-godot\\Lcv.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Ogres\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.2\\microsoft.netframework.referenceassemblies.1.0.2.nupkg.sha512",
-    "C:\\Users\\Ogres\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net472\\1.0.2\\microsoft.netframework.referenceassemblies.net472.1.0.2.nupkg.sha512"
+    "C:\\Users\\youig\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.2\\microsoft.netframework.referenceassemblies.1.0.2.nupkg.sha512",
+    "C:\\Users\\youig\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net472\\1.0.2\\microsoft.netframework.referenceassemblies.net472.1.0.2.nupkg.sha512"
   ],
   "logs": []
 }
