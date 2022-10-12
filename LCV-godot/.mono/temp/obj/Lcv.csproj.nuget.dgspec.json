@@ -1,25 +1,31 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\youig\\LCV Bitbucket\\LCV-godot\\Lcv.csproj": {}
+    "C:\\Users\\otuy9\\OneDrive\\Documents\\LCV\\LCV-godot\\Lcv.csproj": {}
   },
   "projects": {
-    "C:\\Users\\youig\\LCV Bitbucket\\LCV-godot\\Lcv.csproj": {
+    "C:\\Users\\otuy9\\OneDrive\\Documents\\LCV\\LCV-godot\\Lcv.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\youig\\LCV Bitbucket\\LCV-godot\\Lcv.csproj",
+        "projectUniqueName": "C:\\Users\\otuy9\\OneDrive\\Documents\\LCV\\LCV-godot\\Lcv.csproj",
         "projectName": "Lcv",
-        "projectPath": "C:\\Users\\youig\\LCV Bitbucket\\LCV-godot\\Lcv.csproj",
-        "packagesPath": "C:\\Users\\youig\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\youig\\LCV Bitbucket\\LCV-godot\\.mono\\temp\\obj\\",
+        "projectPath": "C:\\Users\\otuy9\\OneDrive\\Documents\\LCV\\LCV-godot\\Lcv.csproj",
+        "packagesPath": "C:\\Users\\otuy9\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\otuy9\\OneDrive\\Documents\\LCV\\LCV-godot\\.mono\\temp\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\youig\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\otuy9\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net472"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -45,7 +51,7 @@
               "autoReferenced": true
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     }

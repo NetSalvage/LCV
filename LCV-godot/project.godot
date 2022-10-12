@@ -62,6 +62,8 @@ ui_help={
 [mono]
 
 runtime/unhandled_exception_policy=1
+project/assembly_name="Lcv"
+debugger_agent/wait_for_debugger=true
 
 [physics]
 

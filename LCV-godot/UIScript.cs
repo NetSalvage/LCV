@@ -101,7 +101,7 @@ public class UIScript : Node2D
 		{
 			selectedHex.RemoveAt(0);
 		}
-		offsetCoordsLabel.SetText	("Clicked hex coordinates go here.");
+		offsetCoordsLabel.SetText("Clicked hex coordinates go here.");
 	}
 
 	//These two functions are connected to various UI elements through Godot's interface, for my own sanity:
@@ -116,11 +116,3 @@ public class UIScript : Node2D
 	}
 
 }
-
-
-
-
-
-
-
-

@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://asdf2/tileset.tres" type="TileSet" id=1]
+[ext_resource path="res://map/tileset.tres" type="TileSet" id=1]
 [ext_resource path="res://UI.tscn" type="PackedScene" id=2]
 [ext_resource path="res://hexMap.cs" type="Script" id=3]
 
@@ -57,6 +57,7 @@ public class hexLayout : Node //Renders the hexagons. Does the visual math. Shou
 "
 
 [node name="MapRN" type="Node2D"]
+position = Vector2( 6, 0 )
 script = ExtResource( 3 )
 
 [node name="BGTileMap" type="TileMap" parent="."]
