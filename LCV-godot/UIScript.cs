@@ -78,7 +78,7 @@ public class UIScript : Node2D
 		}
 	}
 
-	void OnCoordsReceived (Vector2 offsetCoords)
+	void OnClickedOffsetCoords (Vector2 offsetCoords)
 	{
 		if (selectedHex.Count < 1)
 		{
@@ -90,6 +90,7 @@ public class UIScript : Node2D
 			selectedHex.Add(offsetCoords);
 			offsetCoordsLabel.SetText	("(" + selectedHex[0].x + "," + selectedHex[0].y + ")" + '\n' 
 									+"(" + selectedHex[1].x + "," + selectedHex[1].y + ")");
+			offsetCoordsLabel.SetText (offsetCoordsLabel.GetText() + '\n' + "Distance: ");
 		}
 	}
 	

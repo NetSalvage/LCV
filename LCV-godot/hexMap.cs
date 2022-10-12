@@ -2,22 +2,21 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class hexMap : Node //Tracks all of the hexagons. Does hexagon-map math to determine how the hexagons are interacting. All calculations use Cube Coordinates.
+public class hexMap : Node //Tracks all of the hexagons. Also contains all math functions related to hexagons and hex maps. All calculations use Cube Coordinates.
 {
 	/*NOTE: A bunch of this is deprecated.*/
-	PackedScene hexRef;
 	TileMap thisTileMap;
 	Node2D thisUINode;
 	
 	[Signal]
-	public delegate void OffsetCoords (Vector2 offsetCoords);
+	public delegate void ClickedOffsetCoords (Vector2 offsetCoords);
 	
 	public override void _Ready()
 	{
 		thisTileMap = GetNode<TileMap>("BGTileMap");
 		thisUINode = GetNode<Node2D>("UIRN");
 		thisUINode.Connect("MapClicked", this, "OnMapClicked"); //TheThingYouWantToConnect.Connect("SignalString", targetInstance, targetMethod)
-		this.Connect("OffsetCoords", thisUINode, "OnCoordsReceived");
+		this.Connect("ClickedOffsetCoords", thisUINode, "OnClickedOffsetCoords");
 		
 		//use the map scene to track hex map contents etc.
 	}
@@ -25,10 +24,10 @@ public class hexMap : Node //Tracks all of the hexagons. Does hexagon-map math t
 	private void OnMapClicked(Vector2 mousePos)
 	{
 		//TODO: find a way to suss out the context in which the map is being clicked, so you can signal the right methods (???)
-		this.EmitSignal("OffsetCoords", thisTileMap.WorldToMap(mousePos));
+		this.EmitSignal("ClickedOffsetCoords", thisTileMap.WorldToMap(mousePos));
 	}
 
-	public Vector3 GetCubeCoords(Vector3 offsetCoords )
+	public Vector3 GetCubeCoords(Vector2 offsetCoords )
 	{
 		float q = offsetCoords.x;
 		float r = offsetCoords.y - (offsetCoords.x - (offsetCoords.x % 2)) /2;
@@ -37,5 +36,17 @@ public class hexMap : Node //Tracks all of the hexagons. Does hexagon-map math t
 		return (new Vector3 (q, r, -q-r));
 	}
 	
+	public Vector3 CubeSubtract(Vector3 cube1, Vector3 cube2)
+	{
+		return (new Vector3(cube1.x - cube2.x, cube1.y - cube2.y, cube1.z - cube2.z));
+	}
+
+	public int GetCubeDistance(Vector2 hexStart, Vector2 hexEnd)
+	{
+		Vector3 cubeStart = GetCubeCoords(hexStart);
+		Vector3 cubeEnd = GetCubeCoords(hexEnd);
+		Vector3 subtracted = CubeSubtract(cubeStart, cubeEnd);
+		return ((int)( (Mathf.Abs(subtracted.x) + Mathf.Abs(subtracted.y) + Mathf.Abs(subtracted.z))/2 ));
+	}
 
 }
