@@ -13,6 +13,8 @@ public class UIScript : Node2D
 	
 	[Signal]
 	public delegate void MapClicked (Vector2 mousePos);
+	[Signal]
+	public delegate void GetDistance (Vector2 hexStart, Vector2 hexEnd);
 		
 	public override void _Ready()
 	{
@@ -90,10 +92,15 @@ public class UIScript : Node2D
 			selectedHex.Add(offsetCoords);
 			offsetCoordsLabel.SetText	("(" + selectedHex[0].x + "," + selectedHex[0].y + ")" + '\n' 
 									+"(" + selectedHex[1].x + "," + selectedHex[1].y + ")");
-			offsetCoordsLabel.SetText (offsetCoordsLabel.GetText() + '\n' + "Distance: ");
+			this.EmitSignal("GetDistance", selectedHex[0],selectedHex[1]);
 		}
 	}
-	
+	void OnCubeDistance (int theDistance)
+	{
+		offsetCoordsLabel.SetText (offsetCoordsLabel.GetText() + '\n' + "Distance: "+theDistance+" hexes");
+	}
+
+
 	void BackOneLevel()
 	{
 		//i'm going to have to use a List to somehow record "actions taken" by the player, and then use this function to remove the latest step.
