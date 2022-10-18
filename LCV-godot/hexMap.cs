@@ -14,16 +14,8 @@ public class hexMap : Node //Tracks all of the hexagons. Also contains all math 
 	public delegate void CubeDistance (int distance);
 	
 	public override void _Ready()
-	{
-		thisTileMap = GetNode<TileMap>("BGTileMap");
-		thisUINode = GetNode<Node2D>("UIRN");
-		thisUINode.Connect("MapClicked", this, "OnMapClicked"); //TheThingYouWantToConnect.Connect("SignalString", targetInstance, targetMethod)
-		thisUINode.Connect("GetDistance", this, "GetCubeDistance");
-
-		this.Connect("ClickedOffsetCoords", thisUINode, "OnClickedOffsetCoords");
-		this.Connect("CubeDistance", thisUINode, "OnCubeDistance");
-		
-		//use the map scene to track hex map contents etc.
+	{		
+		thisTileMap = this.GetNode<TileMap>("BGTileMap");
 	}
 	
 	private void OnMapClicked(Vector2 mousePos)
@@ -48,7 +40,6 @@ public class hexMap : Node //Tracks all of the hexagons. Also contains all math 
 
 	private int GetCubeDistance(Vector2 hexStart, Vector2 hexEnd)
 	{
-		GD.Print("GetCubeDistance ran");
 		Vector3 cubeStart = GetCubeCoords(hexStart);
 		Vector3 cubeEnd = GetCubeCoords(hexEnd);
 		Vector3 subtracted = CubeSubtract(cubeStart, cubeEnd);

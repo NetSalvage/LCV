@@ -3,64 +3,19 @@
 [ext_resource path="res://map/tileset.tres" type="TileSet" id=1]
 [ext_resource path="res://UI.tscn" type="PackedScene" id=2]
 [ext_resource path="res://hexMap.cs" type="Script" id=3]
-
-[sub_resource type="CSharpScript" id=1]
-script/source = "using Godot;
-using System;
-using System.Collections.Generic;
-
-public class hexLayout : Node //Renders the hexagons. Does the visual math. Should get all of the hex's info from hexMap.
-{	
-
-	public void DrawMap(List<hexAgon> hexList) //TODO: as stuff gets implemented, we'll pass some sort of data type to hexLayout, and then hexLayout will draw from there. For now we'll just pass a starting point.
-	{
-		foreach(hexAgon hex in hexList)
-		{
-			DrawHex(hex);
-		}
-	}
-
-	
-	void DrawHex(hexAgon hex)
-	{	
-		var lineDrawer = hex.GetNode<Line2D>(\"cellEdge\"); //RE line6: like here
-		float circumradius = 20f; //Magic Number but UI stuff will handle any real scaling
-		Vector2 center;
-		center.x = 100 + (circumradius * 3 / 2) * hex.GetQ(); //moves 3*width/4 \"right\" for each +q, which is 3*circumradius*2/4, which is 3*circumradius/2.
-		GD.Print(hex.GetQ());
-		GD.Print(hex.GetR());
-		GD.Print(hex.GetS());
-		GD.Print(Mathf.Cos(Mathf.Pi/3));
-		center.y = 200 	+ hex.GetR() * circumradius * Mathf.Sin((Mathf.Pi/3))
-						- hex.GetS() * circumradius * Mathf.Sin((Mathf.Pi/3))	;
-		/*	Easiest way to get y offset is to add all 3 axes' contributions to the \"y\" axis together. 
-			+q is horizontal. 0 on the y axis.
-			+r is W 60deg S, so r * -(sin60).
-			+s is W 60deg N, so r *  (sin60).	
-			Multiplying both of these by -1, because +y is downwards.	*/
-		
-		for (int i = 0; i <= 6; i++)
-		{
-			int angleDeg; 
-			float angleRad;
-			Vector2 vertex;
-			angleDeg = 60 * i;
-			angleRad = Mathf.Pi * angleDeg / 180;
-			vertex.x = center.x + circumradius * Mathf.Cos(angleRad);
-			vertex.y = center.y + circumradius * Mathf.Sin(angleRad);
-			lineDrawer.AddPoint(vertex, i);
-		}
-		GD.Print(\"Drew hex at (\"+ center.x +\",\"+ center.y +\")\");
-	}
-
-}
-"
+[ext_resource path="res://GameMgr.cs" type="Script" id=4]
 
 [node name="MapRN" type="Node2D"]
 position = Vector2( 6, 0 )
+script = ExtResource( 4 )
+
+[node name="UIRN" parent="." instance=ExtResource( 2 )]
+
+[node name="HexMap" type="Node" parent="."]
 script = ExtResource( 3 )
 
-[node name="BGTileMap" type="TileMap" parent="."]
+[node name="BGTileMap" type="TileMap" parent="HexMap"]
+position = Vector2( 6, 0 )
 tile_set = ExtResource( 1 )
 cell_size = Vector2( 82, 94 )
 cell_half_offset = 1
@@ -68,6 +23,3 @@ cell_tile_origin = 1
 centered_textures = true
 format = 1
 tile_data = PoolIntArray( -458747, 0, 0, -458746, 0, 0, -393212, 0, 0, -393211, 0, 0, -393210, 0, 0, -393209, 0, 0, -393208, 0, 0, -393207, 0, 0, -327678, 0, 0, -327677, 0, 0, -327676, 0, 0, -327675, 6, 0, -327674, 6, 0, -327673, 6, 0, -327672, 6, 0, -327671, 0, 0, -327670, 0, 0, -327669, 0, 0, -262143, 0, 0, -262142, 0, 0, -262141, 0, 0, -262140, 6, 0, -262139, 6, 0, -262138, 6, 0, -262137, 6, 0, -262136, 6, 0, -262135, 0, 0, -262134, 0, 0, -262133, 0, 0, -262132, 0, 0, -262131, 0, 0, -196608, 0, 0, -196607, 5, 0, -196606, 0, 0, -196605, 0, 0, -196604, 6, 0, -196603, 6, 0, -196602, 6, 0, -196601, 6, 0, -196600, 1, 0, -196599, 0, 0, -196598, 1, 0, -196597, 1, 0, -196596, 0, 0, -196595, 0, -1200553578, -196594, 0, 0, -196593, 0, 0, -196592, 0, 0, -196591, 0, 0, -131072, 0, 0, -131071, 0, 0, -131070, 0, 0, -131069, 0, 0, -131068, 0, 0, -131067, 2, 0, -131066, 0, 0, -131065, 21, 0, -131064, 19, 0, -131063, 0, 0, -131062, 0, 0, -131061, 16, -1200553578, -131060, 0, -1200553578, -131059, 0, 0, -131058, 0, 0, -131057, 0, 0, -131056, 0, 0, -65536, 0, 0, -65535, 0, 0, -65534, 0, 0, -65533, 1, 0, -65532, 0, 0, -65531, 0, 0, -65530, 20, 0, -65529, 19, 0, -65528, 2, 0, -65527, 0, 0, -65526, 14, 0, -65525, 0, -1200553578, -65524, 0, 0, -65523, 0, 0, -65522, 23, 0, -65521, 0, 0, -65520, 0, -1200553578, -65519, 0, -1200553578, 0, 0, 0, 1, 0, 0, 2, 0, 0, 3, 0, 0, 4, 2, 0, 5, 0, 0, 6, 1, 0, 7, 1, -1200553578, 8, 0, -1200553578, 9, 10, -1200553578, 10, 12, -1200553578, 11, 0, -1200553578, 12, 0, 0, 13, 8, 0, 14, 0, 0, 15, 0, 0, 16, 0, 0, 17, 0, 0, 131071, 0, 0, 65536, 0, 0, 65537, 0, 0, 65538, 0, 0, 65539, 0, 0, 65540, 5, 0, 65541, 0, 0, 65542, 1, 0, 65543, 15, -1200553578, 65544, 0, 0, 65545, 0, 0, 65546, 0, 0, 65547, 0, 0, 65548, 0, 0, 65549, 25, 0, 65550, 8, 0, 65551, 0, 0, 65552, 21, 0, 65553, 0, 0, 131072, 0, 0, 131073, 0, 0, 131074, 0, 0, 131075, 0, 0, 131076, 0, 0, 131077, 1, 0, 131078, 0, 0, 131079, 0, 0, 131080, 0, 0, 131081, 5, 0, 131082, 0, 0, 131083, 0, 0, 131084, 0, 0, 131085, 0, 0, 131086, 0, 0, 131087, 0, 0, 131088, 0, 0, 131089, 0, 0, 196608, 0, 0, 196609, 5, 0, 196610, 0, 0, 196611, 0, 0, 196612, 0, 0, 196613, 23, 0, 196614, 0, 0, 196615, 0, 0, 196616, 3, 0, 196617, 4, 0, 196618, 2, 0, 196619, 0, 0, 196620, 0, 0, 196621, 0, 0, 196622, 0, 0, 196623, 23, 0, 196624, 0, 0, 262144, 0, 0, 262145, 0, 0, 262146, 0, 0, 262147, 0, 0, 262148, 0, 0, 262149, 0, 0, 262150, 0, 0, 262151, 0, 0, 262152, 8, 0, 262153, 5, 0, 262154, 5, 0, 262155, 0, 0, 262156, 0, 0, 262157, 21, 0, 262158, 0, 0, 262159, 0, 0, 262160, 0, 0, 327680, 0, 0, 327682, 0, 0, 327684, 0, 0, 327686, 0, 0, 327687, 0, 0, 327688, 0, 0, 327689, 0, 0, 327690, 0, 0, 327691, 0, 0, 327692, 0, 0, 327693, 0, 0, 327694, 0, 0 )
-script = SubResource( 1 )
-
-[node name="UIRN" parent="." instance=ExtResource( 2 )]
