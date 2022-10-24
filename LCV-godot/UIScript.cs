@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class UIScript : Node2D
 {
+	hexMap thisMapNode;
 	Camera2D thisCam;
 	CanvasLayer helpWindow;
 	Label offsetCoordsLabel;
@@ -15,6 +16,8 @@ public class UIScript : Node2D
 	public delegate void MapClicked (Vector2 mousePos);
 	[Signal]
 	public delegate void GetDistance (Vector2 hexStart, Vector2 hexEnd);
+
+	Vector2 hexCoords; //map coords and world coords both use vector2, so...
 		
 	public override void _Ready()
 	{
@@ -25,6 +28,11 @@ public class UIScript : Node2D
 		selectedHex = new List<Vector2>();
 	}
 
+	private void _Ready2(GameMgr mgr)
+	{
+		thisMapNode = mgr.MapNodeGet();
+	}
+
 	//things that should happen only on press
 	public override void _Input(InputEvent inputEvent)
 	{
@@ -32,7 +40,7 @@ public class UIScript : Node2D
 		{
 			if (mouseInUI==false && windowsOpen == false)
 			{
-				this.EmitSignal("MapClicked", GetGlobalMousePosition());
+				ClickedOffsetCoords( thisMapNode.WorldToMap(GetGlobalMousePosition()) );
 			}
 		}
 		
@@ -80,26 +88,29 @@ public class UIScript : Node2D
 		}
 	}
 
-	void OnClickedOffsetCoords (Vector2 offsetCoords)
+	void ClickedOffsetCoords (Vector2 offsetCoords)
 	{
 		if (selectedHex.Count < 1)
 		{
 			selectedHex.Add(offsetCoords);
-			offsetCoordsLabel.SetText	("(" + selectedHex[0].x + "," + selectedHex[0].y + ")");
+			offsetCoordsLabel.Text = ("(" + selectedHex[0].x + "," + selectedHex[0].y + ")");
 		}
 		else if (selectedHex.Count < 2)
 		{
 			selectedHex.Add(offsetCoords);
-			offsetCoordsLabel.SetText	("(" + selectedHex[0].x + "," + selectedHex[0].y + ")" + '\n' 
-									+"(" + selectedHex[1].x + "," + selectedHex[1].y + ")");
-			this.EmitSignal("GetDistance", selectedHex[0],selectedHex[1]);
+			int cubeDistance = thisMapNode.GetCubeDistance(selectedHex[0], selectedHex[1]);
+			if (cubeDistance == 1)
+			{
+				offsetCoordsLabel.Text += '\n' + "(" + selectedHex[1].x + "," + selectedHex[1].y + ")"
+										+ '\n' + "Distance: "+ cubeDistance +" hex";
+			}
+			else
+			{
+				offsetCoordsLabel.Text += '\n' + "(" + selectedHex[1].x + "," + selectedHex[1].y + ")"
+										+ '\n' + "Distance: "+ cubeDistance +" hexes";
+			}
 		}
 	}
-	void OnCubeDistance (int theDistance)
-	{
-		offsetCoordsLabel.SetText (offsetCoordsLabel.GetText() + '\n' + "Distance: "+theDistance+" hexes");
-	}
-
 
 	void BackOneLevel()
 	{
@@ -109,7 +120,7 @@ public class UIScript : Node2D
 		{
 			selectedHex.RemoveAt(0);
 		}
-		offsetCoordsLabel.SetText("Clicked hex coordinates go here.");
+		offsetCoordsLabel.Text = "Clicked hex coordinates go here.";
 	}
 
 	//These two functions are connected to various UI elements through Godot's interface, for my own sanity:
@@ -123,4 +134,11 @@ public class UIScript : Node2D
 		mouseInUI = false;
 	}
 
+	private void OnYellUsedCells(Vector2[] usedCells)
+	{
+		foreach (Vector2 cell in usedCells)
+		{
+			//this.EmitSignal("")
+		}
+	}
 }

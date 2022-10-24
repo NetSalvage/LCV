@@ -3,19 +3,30 @@ using System;
 
 public class GameMgr : Node2D
 {
-    Node thisHexMap;
-    Node2D thisUINode;
-    TileMap thisTileMap;
+    hexMap thisMapNode;
+    UIScript thisUINode;
+    [Signal]
+    public delegate void Ready2(GameMgr mgrRef);
 
     public override void _Ready()
     {
-        thisUINode = GetNode<Node2D>("UIRN");
-        thisHexMap = GetNode<Node>("HexMap");
-        thisUINode.Connect("MapClicked", thisHexMap, "OnMapClicked"); //TheThingYouWantToConnect.Connect("SignalString", targetInstance, targetMethod)
-		thisUINode.Connect("GetDistance", thisHexMap, "GetCubeDistance");   
-        thisHexMap.Connect("ClickedOffsetCoords", thisUINode, "OnClickedOffsetCoords");
-		thisHexMap.Connect("CubeDistance", thisUINode, "OnCubeDistance");
+        thisUINode = GetNode<UIScript>("UIRN");
+        thisMapNode = GetNode<hexMap>("MapMgr");
+        this.Connect("Ready2", thisUINode, "_Ready2");
+        this.Connect("Ready2", thisMapNode, "_Ready2");
+        this.EmitSignal("Ready2", this);
     }
+
+    public hexMap MapNodeGet()
+    {
+        return thisMapNode;
+    }
+
+    public UIScript UINodeGet()
+    {
+        return thisUINode;
+    }
+
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
 //  public override void _Process(float delta)

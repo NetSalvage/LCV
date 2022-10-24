@@ -51,6 +51,9 @@ autowrap = true
 layer = 2
 visible = false
 
+[node name="MapOverlay" type="CanvasLayer" parent="."]
+follow_viewport_enable = true
+
 [connection signal="mouse_entered" from="UserCam/UserCanvasLayer/BottomRightWindow" to="." method="OnMouseInUI"]
 [connection signal="mouse_exited" from="UserCam/UserCanvasLayer/BottomRightWindow" to="." method="OnMouseOutUI"]
 [connection signal="mouse_entered" from="UserCam/UserCanvasLayer/TopRightWindow" to="." method="OnMouseInUI"]

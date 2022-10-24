@@ -2,11 +2,10 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class hexMap : Node //Tracks all of the hexagons. Also contains all math functions related to hexagons and hex maps. All calculations use Cube Coordinates.
+public class hexMap : Node2D //Manages the map, also provides all math functions related to hex maps. TileMap provides offset coordinates, but all calculations use Cube Coordinates.
 {
-	/*NOTE: A bunch of this is deprecated.*/
 	TileMap thisTileMap;
-	Node2D thisUINode;
+	UIScript thisUINode;
 	
 	[Signal]
 	public delegate void ClickedOffsetCoords (Vector2 offsetCoords);
@@ -15,13 +14,22 @@ public class hexMap : Node //Tracks all of the hexagons. Also contains all math 
 	
 	public override void _Ready()
 	{		
-		thisTileMap = this.GetNode<TileMap>("BGTileMap");
+		thisTileMap = this.GetNode<TileMap>("ExampleMap"); //TODO: figure out a way to get the map's name ahead of time. That probably goes in the scene loading the game.
+	}
+
+	private void _Ready2(GameMgr mgr)
+	{
+		thisUINode = mgr.UINodeGet();
 	}
 	
-	private void OnMapClicked(Vector2 mousePos)
+	public Vector2 WorldToMap(Vector2 mousePos)
 	{
-		//TODO: find a way to suss out the context in which the map is being clicked, so you can signal the right methods (???)
-		this.EmitSignal("ClickedOffsetCoords", thisTileMap.WorldToMap(mousePos));
+		return (thisTileMap.WorldToMap(mousePos));
+	}
+
+	public Vector2 OnMapToWorld(Vector2 cellPos)
+	{
+		return (thisTileMap.MapToWorld(cellPos));
 	}
 
 	public Vector3 GetCubeCoords(Vector2 offsetCoords )
@@ -38,7 +46,7 @@ public class hexMap : Node //Tracks all of the hexagons. Also contains all math 
 		return (new Vector3(cube1.x - cube2.x, cube1.y - cube2.y, cube1.z - cube2.z));
 	}
 
-	private int GetCubeDistance(Vector2 hexStart, Vector2 hexEnd)
+	public int GetCubeDistance(Vector2 hexStart, Vector2 hexEnd)
 	{
 		Vector3 cubeStart = GetCubeCoords(hexStart);
 		Vector3 cubeEnd = GetCubeCoords(hexEnd);
