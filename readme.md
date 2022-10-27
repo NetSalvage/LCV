@@ -1,5 +1,5 @@
 	To read:
-	About 4/5ths of my work on this project is contained within the ".cs" files. The Aspen stuff is just inherent to the GOdot engine.
+	About 4/5ths of my work on this project is contained within the ".cs" files. The Aspen stuff is just inherent to the Godot engine.
 
 	To open:
 	You're better off just running one of my "releases". But if you wish to see this project from my perspective...
