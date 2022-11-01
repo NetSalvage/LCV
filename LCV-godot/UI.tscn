@@ -1,7 +1,32 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://UIScript.cs" type="Script" id=1]
+[ext_resource path="res://UIMgr.cs" type="Script" id=1]
 [ext_resource path="res://HelpWindow.tscn" type="PackedScene" id=2]
+
+[sub_resource type="CSharpScript" id=1]
+resource_name = "MapOverlay"
+script/source = "using Godot;
+using System;
+
+public class MapOverlay : CanvasLayer
+{
+    // Declare member variables here. Examples:
+    // private int a = 2;
+    // private string b = \"text\";
+
+    // Called when the node enters the scene tree for the first time.
+    public override void _Ready()
+    {
+        
+    }
+
+//  // Called every frame. 'delta' is the elapsed time since the previous frame.
+//  public override void _Process(float delta)
+//  {
+//      
+//  }
+}
+"
 
 [node name="UIRN" type="Node2D"]
 script = ExtResource( 1 )
@@ -53,6 +78,7 @@ visible = false
 
 [node name="MapOverlay" type="CanvasLayer" parent="."]
 follow_viewport_enable = true
+script = SubResource( 1 )
 
 [connection signal="mouse_entered" from="UserCam/UserCanvasLayer/BottomRightWindow" to="." method="OnMouseInUI"]
 [connection signal="mouse_exited" from="UserCam/UserCanvasLayer/BottomRightWindow" to="." method="OnMouseOutUI"]

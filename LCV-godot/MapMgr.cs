@@ -1,20 +1,24 @@
 using Godot;
+using System.Linq; //necessary for 			Godot.Collections.Array godotHexes = thisTileMap.GetUsedCells();
 using System;
 using System.Collections.Generic;
 
-public class hexMap : Node2D //Manages the map, also provides all math functions related to hex maps. TileMap provides offset coordinates, but all calculations use Cube Coordinates.
+public class MapMgr : Node2D //Manages the map, also provides all math functions related to hex maps. TileMap provides offset coordinates, but all calculations use Cube Coordinates.
 {
 	TileMap thisTileMap;
-	UIScript thisUINode;
+	UIMgr thisUINode;
 	
 	[Signal]
 	public delegate void ClickedOffsetCoords (Vector2 offsetCoords);
 	[Signal]
 	public delegate void CubeDistance (int distance);
+
+	Vector2[] usedHexes;
 	
 	public override void _Ready()
 	{		
 		thisTileMap = this.GetNode<TileMap>("ExampleMap"); //TODO: figure out a way to get the map's name ahead of time. That probably goes in the scene loading the game.
+		usedHexes= new Vector2[0];
 	}
 
 	private void _Ready2(GameMgr mgr)
@@ -27,7 +31,7 @@ public class hexMap : Node2D //Manages the map, also provides all math functions
 		return (thisTileMap.WorldToMap(mousePos));
 	}
 
-	public Vector2 OnMapToWorld(Vector2 cellPos)
+	public Vector2 MapToWorld(Vector2 cellPos)
 	{
 		return (thisTileMap.MapToWorld(cellPos));
 	}
@@ -57,4 +61,12 @@ public class hexMap : Node2D //Manages the map, also provides all math functions
 		return theDistance;
 	}
 
+	public Vector2[] GetUsedHexes()
+	{
+		if (usedHexes.Length < 1) 			//not sure that usedhexes will return 0 if it's just "new Vector2[]", but here's hoping
+		{
+			Vector2[] usedHexes = thisTileMap.GetUsedCells().Cast<Vector2>().ToArray();			
+		}
+		return (usedHexes);
+	}
 }

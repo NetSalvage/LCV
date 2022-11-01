@@ -2,36 +2,50 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class UIScript : Node2D
+public class UIMgr : Node2D
 {
-	hexMap thisMapNode;
+	MapMgr thisMapMgr;
 	Camera2D thisCam;
 	CanvasLayer helpWindow;
+	public CanvasLayer mapOverlay { get; private set; }
 	Label offsetCoordsLabel;
 	List<Vector2> selectedHex;
 	bool mouseInUI;
 	bool windowsOpen;
+	bool mapOverlayInitialized = false;
 	
+	Vector2 hexCoords; //map coords and world coords both use vector2, so...
+
 	[Signal]
 	public delegate void MapClicked (Vector2 mousePos);
 	[Signal]
 	public delegate void GetDistance (Vector2 hexStart, Vector2 hexEnd);
 
-	Vector2 hexCoords; //map coords and world coords both use vector2, so...
-		
+	//engine-facing stuff
 	public override void _Ready()
 	{
 		thisCam = GetNode<Camera2D>("UserCam");
 		thisCam.MakeCurrent();
 		offsetCoordsLabel = GetNode<Label>("UserCam/UserCanvasLayer/BottomRightWindow/BottomRightLabel"); //whew, lol.
 		helpWindow = GetNode<CanvasLayer>("UserCam/UserCanvasLayer/Windows/HelpWindowScene");
+		mapOverlay = GetNode<CanvasLayer>("MapOverlay");
+		mapOverlay.Visible=false;
 		selectedHex = new List<Vector2>();
 	}
 
 	private void _Ready2(GameMgr mgr)
 	{
-		thisMapNode = mgr.MapNodeGet();
+		thisMapMgr = mgr.MapNodeGet();
 	}
+
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	public override void _Process(float delta)
+	{
+		LongInputCheck(delta);
+	}
+
+
+	//input-checking
 
 	//things that should happen only on press
 	public override void _Input(InputEvent inputEvent)
@@ -40,14 +54,14 @@ public class UIScript : Node2D
 		{
 			if (mouseInUI==false && windowsOpen == false)
 			{
-				ClickedOffsetCoords( thisMapNode.WorldToMap(GetGlobalMousePosition()) );
+				ClickedOffsetCoords( thisMapMgr.WorldToMap(GetGlobalMousePosition()) );
 			}
 		}
 		
 		if (inputEvent.IsActionPressed("ui_help"))
 		{
-			helpWindow.SetVisible(!helpWindow.IsVisible());
-			if (helpWindow.IsVisible())
+			helpWindow.Visible = !helpWindow.Visible;
+			if (helpWindow.Visible)
 			{
 				windowsOpen = true;
 			}
@@ -57,13 +71,6 @@ public class UIScript : Node2D
 		{
 			BackOneLevel();
 		}
-
-	}
-
-//  // Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(float delta)
-	{
-		LongInputCheck(delta);
 	}
 	
 	void LongInputCheck(float delta)
@@ -88,6 +95,21 @@ public class UIScript : Node2D
 		}
 	}
 
+
+	//Everything else
+
+	void BackOneLevel()
+	{
+		//TODO: use a List to somehow record "actions taken" by the player, and then use this function to remove the latest step.
+		//later I'll incorporate BackOneStep too, for specific windows. Which will do substeps one at a time instead of stepping
+		//out of procedures.
+		while (selectedHex.Count != 0)
+		{
+			selectedHex.RemoveAt(0);
+		}
+		offsetCoordsLabel.Text = "Clicked hex coordinates go here.";
+	}
+
 	void ClickedOffsetCoords (Vector2 offsetCoords)
 	{
 		if (selectedHex.Count < 1)
@@ -98,7 +120,7 @@ public class UIScript : Node2D
 		else if (selectedHex.Count < 2)
 		{
 			selectedHex.Add(offsetCoords);
-			int cubeDistance = thisMapNode.GetCubeDistance(selectedHex[0], selectedHex[1]);
+			int cubeDistance = thisMapMgr.GetCubeDistance(selectedHex[0], selectedHex[1]);
 			if (cubeDistance == 1)
 			{
 				offsetCoordsLabel.Text += '\n' + "(" + selectedHex[1].x + "," + selectedHex[1].y + ")"
@@ -112,16 +134,25 @@ public class UIScript : Node2D
 		}
 	}
 
-	void BackOneLevel()
+	public void MapOverlayVisible (bool state)
 	{
-		//i'm going to have to use a List to somehow record "actions taken" by the player, and then use this function to remove the latest step.
-		//later I'll incorporate BackOneStep too, for specific windows. Which will do substeps one at a time instead of stepping out of procedures.
-		while (selectedHex.Count != 0)
+		mapOverlay.Visible = state;
+		if (state == true && mapOverlayInitialized == false) //wow! dynamic loading!
 		{
-			selectedHex.RemoveAt(0);
+			foreach (Vector2 hex in thisMapMgr.GetUsedHexes())
+			{
+				//instantiate label at The Right Spot, center the label text, 
+				//TODO: if these labels need to get modified in the future, I'll have to reconfigure this to, like...
+				//create a dictionary that uses the hex coordinates as a key.
+				Label hexLabel = new Label(); //What can I even put in those brackets...?
+				hexLabel.SetPosition(thisMapMgr.MapToWorld(hex));
+				//hexLabel.SetAlign((enum)VALIGN_CENTER); continue from here
+			}
+			mapOverlayInitialized = true;
 		}
-		offsetCoordsLabel.Text = "Clicked hex coordinates go here.";
 	}
+
+
 
 	//These two functions are connected to various UI elements through Godot's interface, for my own sanity:
 	private void OnMouseInUI() 
@@ -132,13 +163,5 @@ public class UIScript : Node2D
 	private void OnMouseOutUI()
 	{
 		mouseInUI = false;
-	}
-
-	private void OnYellUsedCells(Vector2[] usedCells)
-	{
-		foreach (Vector2 cell in usedCells)
-		{
-			//this.EmitSignal("")
-		}
 	}
 }

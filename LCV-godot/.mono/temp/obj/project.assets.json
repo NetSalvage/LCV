@@ -421,11 +421,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\otuy9\\OneDrive\\Documents\\LCV\\LCV-godot\\Lcv.csproj",
+      "projectUniqueName": "C:\\Users\\otuy9\\OneDrive\\Documents\\Git\\LCV\\LCV-godot\\Lcv.csproj",
       "projectName": "Lcv",
-      "projectPath": "C:\\Users\\otuy9\\OneDrive\\Documents\\LCV\\LCV-godot\\Lcv.csproj",
+      "projectPath": "C:\\Users\\otuy9\\OneDrive\\Documents\\Git\\LCV\\LCV-godot\\Lcv.csproj",
       "packagesPath": "C:\\Users\\otuy9\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\otuy9\\OneDrive\\Documents\\LCV\\LCV-godot\\.mono\\temp\\obj\\",
+      "outputPath": "C:\\Users\\otuy9\\OneDrive\\Documents\\Git\\LCV\\LCV-godot\\.mono\\temp\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
