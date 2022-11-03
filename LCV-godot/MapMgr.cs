@@ -3,8 +3,7 @@ using System.Linq; //necessary for 			Godot.Collections.Array godotHexes = thisT
 using System;
 using System.Collections.Generic;
 
-public class MapMgr : Node2D //Manages the map, also provides all math functions related to hex maps. TileMap provides offset coordinates, but all calculations use Cube Coordinates.
-{
+public class MapMgr : Node2D { //Manages the map, also provides all math functions related to hex maps. TileMap provides offset coordinates, but all calculations use Cube Coordinates.
 	TileMap thisTileMap;
 	UIMgr thisUINode;
 	
@@ -15,29 +14,24 @@ public class MapMgr : Node2D //Manages the map, also provides all math functions
 
 	Vector2[] usedHexes;
 	
-	public override void _Ready()
-	{		
+	public override void _Ready() {		
 		thisTileMap = this.GetNode<TileMap>("ExampleMap"); //TODO: figure out a way to get the map's name ahead of time. That probably goes in the scene loading the game.
 		usedHexes= new Vector2[0];
 	}
 
-	private void _Ready2(GameMgr mgr)
-	{
-		thisUINode = mgr.UINodeGet();
+	private void _Ready2(GameMgr mgr) {
+		thisUINode = mgr.thisUINode;
 	}
 	
-	public Vector2 WorldToMap(Vector2 mousePos)
-	{
+	public Vector2 WorldToMap(Vector2 mousePos) {
 		return (thisTileMap.WorldToMap(mousePos));
 	}
 
-	public Vector2 MapToWorld(Vector2 cellPos)
-	{
+	public Vector2 MapToWorld(Vector2 cellPos) {
 		return (thisTileMap.MapToWorld(cellPos));
 	}
 
-	public Vector3 GetCubeCoords(Vector2 offsetCoords )
-	{
+	public Vector3 GetCubeCoords(Vector2 offsetCoords ) {
 		float q = offsetCoords.x;
 		float r = offsetCoords.y - (offsetCoords.x - (offsetCoords.x % 2)) /2;
 		//"bitwise and"; &1 returns 0 if even, and 1 if odd.
@@ -45,13 +39,11 @@ public class MapMgr : Node2D //Manages the map, also provides all math functions
 		return (new Vector3 (q, r, -q-r));
 	}
 	
-	public Vector3 CubeSubtract(Vector3 cube1, Vector3 cube2)
-	{
+	public Vector3 CubeSubtract(Vector3 cube1, Vector3 cube2) {
 		return (new Vector3(cube1.x - cube2.x, cube1.y - cube2.y, cube1.z - cube2.z));
 	}
 
-	public int GetCubeDistance(Vector2 hexStart, Vector2 hexEnd)
-	{
+	public int GetCubeDistance(Vector2 hexStart, Vector2 hexEnd) {
 		Vector3 cubeStart = GetCubeCoords(hexStart);
 		Vector3 cubeEnd = GetCubeCoords(hexEnd);
 		Vector3 subtracted = CubeSubtract(cubeStart, cubeEnd);
@@ -61,12 +53,12 @@ public class MapMgr : Node2D //Manages the map, also provides all math functions
 		return theDistance;
 	}
 
-	public Vector2[] GetUsedHexes()
-	{
-		if (usedHexes.Length < 1) 			//not sure that usedhexes will return 0 if it's just "new Vector2[]", but here's hoping
-		{
-			Vector2[] usedHexes = thisTileMap.GetUsedCells().Cast<Vector2>().ToArray();			
+	public Vector2[] GetUsedHexes() {
+		if (usedHexes.Length < 1) {			//not sure that usedhexes will return 0 if it's just "new Vector2[]", but here's hoping
+			//getusedcells IS returning every hex
+			usedHexes = thisTileMap.GetUsedCells().Cast<Vector2>().ToArray(); //C# exceptionalism
+			//this is successfully filling the vector2 array
 		}
-		return (usedHexes);
+		return usedHexes;
 	}
 }
