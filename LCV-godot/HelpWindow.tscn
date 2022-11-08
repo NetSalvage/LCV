@@ -15,7 +15,8 @@ anchor_right = 0.95
 anchor_bottom = 0.95
 text = "Arrow keys or ESDF: Pan around the map.
 Primary mouse button: Select a hex.
-ESC: Cancel. (Backs out of things sequentially.)
+ESC: Cancel selection.
+L: Toggle display of hex coordinates.
 F1 again: close this help window."
 align = 1
 valign = 1

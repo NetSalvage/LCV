@@ -6,11 +6,9 @@
 [ext_resource path="res://GameMgr.cs" type="Script" id=4]
 
 [node name="GameRN" type="Node2D"]
-position = Vector2( 6, 0 )
 script = ExtResource( 4 )
 
 [node name="UIRN" parent="." instance=ExtResource( 2 )]
-position = Vector2( 0, -1 )
 
 [node name="MapMgr" parent="." instance=ExtResource( 1 )]
 

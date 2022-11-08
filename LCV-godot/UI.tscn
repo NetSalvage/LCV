@@ -35,6 +35,7 @@ script = ExtResource( 1 )
 anchor_mode = 0
 
 [node name="UserCanvasLayer" type="CanvasLayer" parent="UserCam"]
+layer = 2
 
 [node name="BottomRightWindow" type="PanelContainer" parent="UserCam/UserCanvasLayer"]
 anchor_left = 0.85
@@ -64,6 +65,8 @@ margin_left = 7.0
 margin_top = 7.0
 margin_right = 136.36
 margin_bottom = 77.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_vertical = 1
 text = "Press F1 for help."
 align = 1
@@ -73,7 +76,7 @@ autowrap = true
 [node name="Windows" type="Node" parent="UserCam/UserCanvasLayer"]
 
 [node name="HelpWindowScene" parent="UserCam/UserCanvasLayer/Windows" instance=ExtResource( 2 )]
-layer = 2
+layer = 3
 visible = false
 
 [node name="MapOverlay" type="CanvasLayer" parent="."]

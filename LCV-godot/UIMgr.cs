@@ -9,7 +9,7 @@ public class UIMgr : Node2D {
 	Label offsetCoordsLabel;
 
 	CanvasLayer mapOverlay;
-	Dictionary<Vector2, Label> hexLabel = new Dictionary<Vector2, Label>();
+	Dictionary<Vector2, Node> hexOverlay = new Dictionary<Vector2, Node>();
 
 	List<Vector2> selectedHex;
 	bool mouseInUI;
@@ -58,6 +58,9 @@ public class UIMgr : Node2D {
 			helpWindow.Visible = !helpWindow.Visible;
 			if (helpWindow.Visible) {
 				windowsOpen = true;
+			} else
+			{
+				windowsOpen = false;
 			}
 		}
 		
@@ -122,13 +125,23 @@ public class UIMgr : Node2D {
 
 	public void MapOverlayVisible (bool state) {
 		mapOverlay.Visible = state;
-		if (state == true && hexLabel.Count == 0) { //wow! dynamic loading!
+		if (state == true && hexOverlay.Count == 0) { //wow! dynamic loading!
 			foreach (Vector2 hex in thisMapMgr.GetUsedHexes()) {
-				hexLabel.Add (hex,new Label());
-				mapOverlay.AddChild(hexLabel[hex]);
-				hexLabel[hex].SetPosition(thisMapMgr.thisTileMap.MapToWorld(hex));
-				hexLabel[hex].Align = Label.AlignEnum.Center; //that took long enough to figure out
-				hexLabel[hex].Text = "("+hex.x+","+hex.y+")";
+				hexOverlay.Add (hex,new Node());
+				mapOverlay.AddChild(hexOverlay[hex]);
+				Container co = new Container();
+				hexOverlay[hex].AddChild(co);
+				co.RectGlobalPosition = thisMapMgr.thisTileMap.MapToWorld(hex);
+				co.RectSize = thisMapMgr.thisTileMap.CellSize;
+				Label lbl = new Label();
+				co.AddChild(lbl);
+				lbl.Text = "("+hex.x+","+hex.y+")";
+				lbl.Align = Label.AlignEnum.Center; //that took long enough to figure out
+				lbl.Valign = Label.VAlign.Center; //improperly documented!!
+				lbl.AnchorLeft= 0;
+				lbl.AnchorRight= 1;
+				lbl.AnchorTop= 0;
+				lbl.AnchorBottom= 1;	
 			} //HELL YES it works!!
 			//TODO: center the labels.
 			//FAR FUTURE TODO: draw hexagons over these hexagons
