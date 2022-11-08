@@ -50,7 +50,7 @@ public class UIMgr : Node2D {
 	public override void _Input(InputEvent inputEvent) {
 		if (inputEvent.IsActionPressed("choose_0")) {
 			if (mouseInUI==false && windowsOpen == false) {
-				ClickedOffsetCoords( thisMapMgr.WorldToMap(GetGlobalMousePosition()) );
+				ClickedOffsetCoords( thisMapMgr.thisTileMap.WorldToMap(GetGlobalMousePosition()));
 			}
 		}
 		
@@ -126,7 +126,7 @@ public class UIMgr : Node2D {
 			foreach (Vector2 hex in thisMapMgr.GetUsedHexes()) {
 				hexLabel.Add (hex,new Label());
 				mapOverlay.AddChild(hexLabel[hex]);
-				hexLabel[hex].SetPosition(thisMapMgr.MapToWorld(hex));
+				hexLabel[hex].SetPosition(thisMapMgr.thisTileMap.MapToWorld(hex));
 				hexLabel[hex].Align = Label.AlignEnum.Center; //that took long enough to figure out
 				hexLabel[hex].Text = "("+hex.x+","+hex.y+")";
 			} //HELL YES it works!!

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 
 public class MapMgr : Node2D { //Manages the map, also provides all math functions related to hex maps. TileMap provides offset coordinates, but all calculations use Cube Coordinates.
-	TileMap thisTileMap;
+	public TileMap thisTileMap {get; private set;}
 	UIMgr thisUINode;
 	
 	[Signal]
@@ -23,14 +23,6 @@ public class MapMgr : Node2D { //Manages the map, also provides all math functio
 		thisUINode = mgr.thisUINode;
 	}
 	
-	public Vector2 WorldToMap(Vector2 mousePos) {
-		return (thisTileMap.WorldToMap(mousePos));
-	}
-
-	public Vector2 MapToWorld(Vector2 cellPos) {
-		return (thisTileMap.MapToWorld(cellPos));
-	}
-
 	public Vector3 GetCubeCoords(Vector2 offsetCoords ) {
 		float q = offsetCoords.x;
 		float r = offsetCoords.y - (offsetCoords.x - (offsetCoords.x % 2)) /2;
