@@ -1,0 +1,9 @@
+C:\Users\otuy9\OneDrive\Documents\Git\LCV\LCV-godot\.mono\temp\bin\ExportRelease\Lcv.dll
+C:\Users\otuy9\OneDrive\Documents\Git\LCV\LCV-godot\.mono\temp\bin\ExportRelease\Lcv.pdb
+C:\Users\otuy9\OneDrive\Documents\Git\LCV\LCV-godot\.mono\temp\obj\ExportRelease\Lcv.csproj.AssemblyReference.cache
+C:\Users\otuy9\OneDrive\Documents\Git\LCV\LCV-godot\.mono\temp\obj\ExportRelease\Lcv.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\otuy9\OneDrive\Documents\Git\LCV\LCV-godot\.mono\temp\obj\ExportRelease\Lcv.AssemblyInfoInputs.cache
+C:\Users\otuy9\OneDrive\Documents\Git\LCV\LCV-godot\.mono\temp\obj\ExportRelease\Lcv.AssemblyInfo.cs
+C:\Users\otuy9\OneDrive\Documents\Git\LCV\LCV-godot\.mono\temp\obj\ExportRelease\Lcv.csproj.CoreCompileInputs.cache
+C:\Users\otuy9\OneDrive\Documents\Git\LCV\LCV-godot\.mono\temp\obj\ExportRelease\Lcv.dll
+C:\Users\otuy9\OneDrive\Documents\Git\LCV\LCV-godot\.mono\temp\obj\ExportRelease\Lcv.pdb

@@ -9,7 +9,7 @@ public class UIMgr : Node2D {
 	Label offsetCoordsLabel;
 
 	CanvasLayer mapOverlay;
-	Dictionary<Vector2, Node> hexOverlay = new Dictionary<Vector2, Node>();
+	Dictionary<Vector2, UIHex> hexOverlay = new Dictionary<Vector2, UIHex>();
 
 	List<Vector2> selectedHex;
 	bool mouseInUI;
@@ -126,22 +126,12 @@ public class UIMgr : Node2D {
 	public void MapOverlayVisible (bool state) {
 		mapOverlay.Visible = state;
 		if (state == true && hexOverlay.Count == 0) { //wow! dynamic loading!
+			PackedScene uIHex = GD.Load<PackedScene>("res://UIHex.tscn");
 			foreach (Vector2 hex in thisMapMgr.GetUsedHexes()) {
-				hexOverlay.Add (hex,new Node());
+				hexOverlay.Add (hex, (UIHex)uIHex.Instance());
 				mapOverlay.AddChild(hexOverlay[hex]);
-				Container co = new Container();
-				hexOverlay[hex].AddChild(co);
-				co.RectGlobalPosition = thisMapMgr.thisTileMap.MapToWorld(hex);
-				co.RectSize = thisMapMgr.thisTileMap.CellSize;
-				Label lbl = new Label();
-				co.AddChild(lbl);
-				lbl.Text = "("+hex.x+","+hex.y+")";
-				lbl.Align = Label.AlignEnum.Center; //that took long enough to figure out
-				lbl.Valign = Label.VAlign.Center; //improperly documented!!
-				lbl.AnchorLeft= 0;
-				lbl.AnchorRight= 1;
-				lbl.AnchorTop= 0;
-				lbl.AnchorBottom= 1;	
+				hexOverlay[hex].Position = thisMapMgr.thisTileMap.MapToWorld(hex);
+				hexOverlay[hex].Prep(thisMapMgr,hex);
 			} //HELL YES it works!!
 			//TODO: center the labels.
 			//FAR FUTURE TODO: draw hexagons over these hexagons
