@@ -49,8 +49,9 @@ public class UIMgr : Node2D {
 	//things that should happen only on press
 	public override void _Input(InputEvent inputEvent) {
 		if (inputEvent.IsActionPressed("choose_0")) {
-			if (mouseInUI==false && windowsOpen == false) {
-				ClickedOffsetCoords( thisMapMgr.thisTileMap.WorldToMap(GetGlobalMousePosition()));
+			if (mouseInUI==false && windowsOpen == false && selectedHex.Count <2) {
+				selectedHex.Add(thisMapMgr.thisTileMap.WorldToMap(GetGlobalMousePosition()));
+				updateSelectionUI();
 			}
 		}
 		
@@ -71,6 +72,30 @@ public class UIMgr : Node2D {
 		if (inputEvent.IsActionPressed("ui_maplabels")) {
 			MapOverlayVisible(!mapOverlay.Visible);
 		}
+
+		if (selectedHex.Count == 1) {
+			//dooon't think I can turn this into a switch statement. also good lord this is ugly...but it's well-structured? I think?
+			if (inputEvent.IsActionPressed("mapN")) {
+				selectedHex[0] = thisMapMgr.GetOffsetCoords( thisMapMgr.MoveHex( thisMapMgr.GetCubeCoords( selectedHex[0]),0));
+			}
+			else if (inputEvent.IsActionPressed("mapNE")) {
+				selectedHex[0] = thisMapMgr.GetOffsetCoords( thisMapMgr.MoveHex( thisMapMgr.GetCubeCoords( selectedHex[0]),1));			
+			}
+			else if (inputEvent.IsActionPressed("mapSE")) {
+				selectedHex[0] = thisMapMgr.GetOffsetCoords( thisMapMgr.MoveHex( thisMapMgr.GetCubeCoords( selectedHex[0]),2));
+			}
+			else if (inputEvent.IsActionPressed("mapS")) {
+				selectedHex[0] = thisMapMgr.GetOffsetCoords( thisMapMgr.MoveHex( thisMapMgr.GetCubeCoords( selectedHex[0]),3));
+			}
+			else if (inputEvent.IsActionPressed("mapSW")) {
+				selectedHex[0] = thisMapMgr.GetOffsetCoords( thisMapMgr.MoveHex( thisMapMgr.GetCubeCoords( selectedHex[0]),4));
+			}
+			else if (inputEvent.IsActionPressed("mapNW")) {
+				selectedHex[0] = thisMapMgr.GetOffsetCoords( thisMapMgr.MoveHex( thisMapMgr.GetCubeCoords( selectedHex[0]),5));
+			}
+			updateSelectionUI();
+		}
+
 	}
 	
 	void LongInputCheck(float delta) {
@@ -104,13 +129,11 @@ public class UIMgr : Node2D {
 		offsetCoordsLabel.Text = "Clicked hex coordinates go here.";
 	}
 
-	void ClickedOffsetCoords (Vector2 offsetCoords) {
-		if (selectedHex.Count < 1) {
-			selectedHex.Add(offsetCoords);
+	void updateSelectionUI () {
+		if (selectedHex.Count < 2) {
 			offsetCoordsLabel.Text = ("(" + selectedHex[0].x + "," + selectedHex[0].y + ")");
 		}
-		else if (selectedHex.Count < 2) {
-			selectedHex.Add(offsetCoords);
+		else if (selectedHex.Count < 3) {
 			int cubeDistance = thisMapMgr.GetCubeDistance(selectedHex[0], selectedHex[1]);
 			if (cubeDistance == 1) {
 				offsetCoordsLabel.Text += '\n' + "(" + selectedHex[1].x + "," + selectedHex[1].y + ")"
@@ -137,6 +160,7 @@ public class UIMgr : Node2D {
 			//FAR FUTURE TODO: draw hexagons over these hexagons
 		}
 	}
+
 
 
 
