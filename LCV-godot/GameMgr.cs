@@ -15,10 +15,4 @@ public class GameMgr : Node2D {
         this.Connect("Ready2", thisMapNode, "_Ready2");
         this.EmitSignal("Ready2", this);
     }
-
-//  // Called every frame. 'delta' is the elapsed time since the previous frame.
-//  public override void _Process(float delta)
-//  {
-//      
-//  }
 }

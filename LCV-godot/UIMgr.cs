@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using HexMath;
 
 public class UIMgr : Node2D {
 	public MapMgr thisMapMgr { get; private set; }
@@ -16,11 +17,6 @@ public class UIMgr : Node2D {
 	bool windowsOpen;
 	
 	Vector2 hexCoords; //map coords and world coords both use vector2, so...
-
-	[Signal]
-	public delegate void MapClicked (Vector2 mousePos);
-	[Signal]
-	public delegate void GetDistance (Vector2 hexStart, Vector2 hexEnd);
 
 	//engine-facing stuff
 	public override void _Ready() {
@@ -59,8 +55,8 @@ public class UIMgr : Node2D {
 			helpWindow.Visible = !helpWindow.Visible;
 			if (helpWindow.Visible) {
 				windowsOpen = true;
-			} else
-			{
+			}
+			else {
 				windowsOpen = false;
 			}
 		}
@@ -76,22 +72,22 @@ public class UIMgr : Node2D {
 		if (selectedHex.Count == 1) {
 			//dooon't think I can turn this into a switch statement. also good lord this is ugly...but it's well-structured? I think?
 			if (inputEvent.IsActionPressed("mapN")) {
-				selectedHex[0] = thisMapMgr.GetOffsetCoords( thisMapMgr.MoveHex( thisMapMgr.GetCubeCoords( selectedHex[0]),0));
+				selectedHex[0] = OddQ.neighbor((selectedHex[0]),0);
 			}
 			else if (inputEvent.IsActionPressed("mapNE")) {
-				selectedHex[0] = thisMapMgr.GetOffsetCoords( thisMapMgr.MoveHex( thisMapMgr.GetCubeCoords( selectedHex[0]),1));			
+				selectedHex[0] = OddQ.neighbor((selectedHex[0]),1);			
 			}
 			else if (inputEvent.IsActionPressed("mapSE")) {
-				selectedHex[0] = thisMapMgr.GetOffsetCoords( thisMapMgr.MoveHex( thisMapMgr.GetCubeCoords( selectedHex[0]),2));
+				selectedHex[0] = OddQ.neighbor((selectedHex[0]),2);	
 			}
 			else if (inputEvent.IsActionPressed("mapS")) {
-				selectedHex[0] = thisMapMgr.GetOffsetCoords( thisMapMgr.MoveHex( thisMapMgr.GetCubeCoords( selectedHex[0]),3));
+				selectedHex[0] = OddQ.neighbor((selectedHex[0]),3);	
 			}
 			else if (inputEvent.IsActionPressed("mapSW")) {
-				selectedHex[0] = thisMapMgr.GetOffsetCoords( thisMapMgr.MoveHex( thisMapMgr.GetCubeCoords( selectedHex[0]),4));
+				selectedHex[0] = OddQ.neighbor((selectedHex[0]),4);	
 			}
 			else if (inputEvent.IsActionPressed("mapNW")) {
-				selectedHex[0] = thisMapMgr.GetOffsetCoords( thisMapMgr.MoveHex( thisMapMgr.GetCubeCoords( selectedHex[0]),5));
+				selectedHex[0] = OddQ.neighbor((selectedHex[0]),5);	
 			}
 			updateSelectionUI();
 		}
@@ -134,14 +130,14 @@ public class UIMgr : Node2D {
 			offsetCoordsLabel.Text = ("(" + selectedHex[0].x + "," + selectedHex[0].y + ")");
 		}
 		else if (selectedHex.Count < 3) {
-			int cubeDistance = thisMapMgr.GetCubeDistance(selectedHex[0], selectedHex[1]);
-			if (cubeDistance == 1) {
+			int distance = OddQ.distance(selectedHex[0], selectedHex[1]);
+			if (distance == 1) {
 				offsetCoordsLabel.Text += '\n' + "(" + selectedHex[1].x + "," + selectedHex[1].y + ")"
-										+ '\n' + "Distance: "+ cubeDistance +" hex";
+										+ '\n' + "Distance: "+ distance +" hex";
 			}
 			else {
 				offsetCoordsLabel.Text += '\n' + "(" + selectedHex[1].x + "," + selectedHex[1].y + ")"
-										+ '\n' + "Distance: "+ cubeDistance +" hexes";
+										+ '\n' + "Distance: "+ distance +" hexes";
 			}
 		}
 	}
@@ -155,14 +151,10 @@ public class UIMgr : Node2D {
 				mapOverlay.AddChild(hexOverlay[hex]);
 				hexOverlay[hex].Position = thisMapMgr.thisTileMap.MapToWorld(hex);
 				hexOverlay[hex].Prep(thisMapMgr,hex);
-			} //HELL YES it works!!
-			//TODO: center the labels.
+			}
 			//FAR FUTURE TODO: draw hexagons over these hexagons
 		}
 	}
-
-
-
 
 	//These two functions are connected to various UI elements through Godot's interface, for my own sanity:
 	private void OnMouseInUI() {
