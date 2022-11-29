@@ -1,6 +1,12 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://UIHex.cs" type="Script" id=1]
+[ext_resource path="res://Addons/Godot-Fontpack-d244bf6170b399a6d4d26a0d906058ddf2dafdf1/fonts/montreal/Montreal-Regular.ttf" type="DynamicFontData" id=2]
+
+[sub_resource type="DynamicFont" id=1]
+size = 14
+use_filter = true
+font_data = ExtResource( 2 )
 
 [node name="UIHRN" type="Node2D"]
 script = ExtResource( 1 )
@@ -12,3 +18,4 @@ margin_bottom = 200.0
 [node name="coordsLbl" type="Label" parent="coordsCo"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+custom_fonts/font = SubResource( 1 )

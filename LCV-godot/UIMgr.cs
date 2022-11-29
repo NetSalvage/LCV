@@ -72,22 +72,22 @@ public class UIMgr : Node2D {
 		if (selectedHex.Count == 1) {
 			//dooon't think I can turn this into a switch statement. also good lord this is ugly...but it's well-structured? I think?
 			if (inputEvent.IsActionPressed("mapN")) {
-				selectedHex[0] = OddQ.neighbor((selectedHex[0]),0);
+				selectedHex[0] = OddQ.Neighbor((selectedHex[0]),0);
 			}
 			else if (inputEvent.IsActionPressed("mapNE")) {
-				selectedHex[0] = OddQ.neighbor((selectedHex[0]),1);			
+				selectedHex[0] = OddQ.Neighbor((selectedHex[0]),1);			
 			}
 			else if (inputEvent.IsActionPressed("mapSE")) {
-				selectedHex[0] = OddQ.neighbor((selectedHex[0]),2);	
+				selectedHex[0] = OddQ.Neighbor((selectedHex[0]),2);	
 			}
 			else if (inputEvent.IsActionPressed("mapS")) {
-				selectedHex[0] = OddQ.neighbor((selectedHex[0]),3);	
+				selectedHex[0] = OddQ.Neighbor((selectedHex[0]),3);	
 			}
 			else if (inputEvent.IsActionPressed("mapSW")) {
-				selectedHex[0] = OddQ.neighbor((selectedHex[0]),4);	
+				selectedHex[0] = OddQ.Neighbor((selectedHex[0]),4);	
 			}
 			else if (inputEvent.IsActionPressed("mapNW")) {
-				selectedHex[0] = OddQ.neighbor((selectedHex[0]),5);	
+				selectedHex[0] = OddQ.Neighbor((selectedHex[0]),5);	
 			}
 			updateSelectionUI();
 		}
@@ -130,7 +130,7 @@ public class UIMgr : Node2D {
 			offsetCoordsLabel.Text = ("(" + selectedHex[0].x + "," + selectedHex[0].y + ")");
 		}
 		else if (selectedHex.Count < 3) {
-			int distance = OddQ.distance(selectedHex[0], selectedHex[1]);
+			int distance = OddQ.Distance(selectedHex[0], selectedHex[1]);
 			if (distance == 1) {
 				offsetCoordsLabel.Text += '\n' + "(" + selectedHex[1].x + "," + selectedHex[1].y + ")"
 										+ '\n' + "Distance: "+ distance +" hex";
