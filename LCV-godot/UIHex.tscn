@@ -11,11 +11,49 @@ font_data = ExtResource( 2 )
 [node name="UIHRN" type="Node2D"]
 script = ExtResource( 1 )
 
-[node name="coordsCo" type="Container" parent="."]
-margin_right = 200.0
-margin_bottom = 200.0
+[node name="CoordsCo" type="Container" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -14.0
+margin_right = 94.32
+margin_bottom = 94.0
 
-[node name="coordsLbl" type="Label" parent="coordsCo"]
+[node name="CoordsLbl" type="Label" parent="CoordsCo"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_fonts/font = SubResource( 1 )
+align = 1
+valign = 1
+
+[node name="Outline" type="Node2D" parent="CoordsCo"]
+visible = false
+
+[node name="Edge0" type="Line2D" parent="CoordsCo/Outline"]
+points = PoolVector2Array( 27.135, 0, 81.406, 0 )
+width = 5.0
+default_color = Color( 1, 0.909804, 0, 1 )
+
+[node name="Edge1" type="Line2D" parent="CoordsCo/Outline"]
+points = PoolVector2Array( 81.406, 0, 108.54, 47 )
+width = 5.0
+default_color = Color( 1, 0.909804, 0, 1 )
+
+[node name="Edge2" type="Line2D" parent="CoordsCo/Outline"]
+points = PoolVector2Array( 108.54, 47, 81.406, 94 )
+width = 5.0
+default_color = Color( 1, 0.909804, 0, 1 )
+
+[node name="Edge3" type="Line2D" parent="CoordsCo/Outline"]
+points = PoolVector2Array( 27.135, 94, 81.406, 94 )
+width = 5.0
+default_color = Color( 1, 0.909804, 0, 1 )
+
+[node name="Edge4" type="Line2D" parent="CoordsCo/Outline"]
+points = PoolVector2Array( 0, 47, 27.135, 94 )
+width = 5.0
+default_color = Color( 1, 0.909804, 0, 1 )
+
+[node name="Edge5" type="Line2D" parent="CoordsCo/Outline"]
+points = PoolVector2Array( 0, 47, 27.135, 0 )
+width = 5.0
+default_color = Color( 1, 0.909804, 0, 1 )

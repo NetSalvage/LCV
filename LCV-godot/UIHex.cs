@@ -14,24 +14,19 @@ public class UIHex : Node2D
 
     MapMgr thisMapMgr;
     Vector2 coords;
+    Polygon2D outline;
     
     public override void _Ready() {
-        coordsCo = this.GetNode<Container>("coordsCo");
-        coordsLbl = this.GetNode<Label>("coordsCo/coordsLbl");
+        coordsCo = this.GetNode<Container>("CoordsCo");
+        coordsLbl = this.GetNode<Label>("CoordsCo/CoordsLbl");
     }
 
     public void Prep (MapMgr mgr, Vector2 hex) {
         if (readied == false) {
             thisMapMgr = mgr;
             coords = hex;
-            coordsCo.RectSize = thisMapMgr.thisTileMap.CellSize;
             coordsLbl.Text = "("+coords.x+","+coords.y+")";
-            coordsLbl.Align = Label.AlignEnum.Center; //that took long enough to figure out
-            coordsLbl.Valign = Label.VAlign.Center; //improperly documented!!
-            coordsLbl.AnchorLeft= 0;
-            coordsLbl.AnchorRight= 1;
-            coordsLbl.AnchorTop= 0;
-            coordsLbl.AnchorBottom= 1;	
+            //setting sizes by code is a fun trick but not really worth it when I can make scenes ahead of time (and these controls are inscrutable)
         }
 
     }
