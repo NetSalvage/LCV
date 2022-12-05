@@ -26,13 +26,19 @@ public class UIMgr : Node2D {
 		helpWindow = GetNode<CanvasLayer>("UserCam/UserCanvasLayer/Windows/HelpWindowScene");
 		
 		mapOverlay = GetNode<CanvasLayer>("MapOverlay");
-		mapOverlay.Visible=false;
-
 		selectedHex = new List<Vector2>();
 	}
 
 	private void _Ready2(GameMgr mgr) {
 		thisMapMgr = mgr.thisMapNode;
+		PackedScene uIHex = GD.Load<PackedScene>("res://UIHex.tscn");
+		foreach (Vector2 hex in thisMapMgr.GetUsedHexes()) {
+			hexOverlay.Add (hex, (UIHex)uIHex.Instance());
+			mapOverlay.AddChild(hexOverlay[hex]);
+			hexOverlay[hex].Name = "UIhex["+hex.x+","+hex.y+"]";
+			hexOverlay[hex].Position = thisMapMgr.thisTileMap.MapToWorld(hex);
+			hexOverlay[hex].Prep(thisMapMgr,hex);
+		}
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -66,7 +72,9 @@ public class UIMgr : Node2D {
 		}
 
 		if (inputEvent.IsActionPressed("ui_maplabels")) {
-			MapOverlayVisible(!mapOverlay.Visible);
+			foreach (KeyValuePair<Vector2, UIHex> i in hexOverlay) {
+				i.Value.coordsLbl.Visible=!i.Value.coordsLbl.Visible;
+			}
 		}
 
 		if (selectedHex.Count == 1) {
@@ -120,16 +128,20 @@ public class UIMgr : Node2D {
 		//later I'll incorporate BackOneStep too, for specific windows. Which will do substeps one at a time instead of stepping
 		//out of procedures.
 		while (selectedHex.Count != 0) {
+			hexOverlay[selectedHex[0]].selected=false;
 			selectedHex.RemoveAt(0);
 		}
 		offsetCoordsLabel.Text = "Clicked hex coordinates go here.";
 	}
 
 	void updateSelectionUI () {
+		foreach (Vector2 i in selectedHex) {
+			hexOverlay[i].selected=true;
+		}
 		if (selectedHex.Count < 2) {
 			offsetCoordsLabel.Text = ("(" + selectedHex[0].x + "," + selectedHex[0].y + ")");
 		}
-		else if (selectedHex.Count < 3) {
+		else {
 			int distance = OddQ.Distance(selectedHex[0], selectedHex[1]);
 			if (distance == 1) {
 				offsetCoordsLabel.Text += '\n' + "(" + selectedHex[1].x + "," + selectedHex[1].y + ")"
@@ -139,20 +151,6 @@ public class UIMgr : Node2D {
 				offsetCoordsLabel.Text += '\n' + "(" + selectedHex[1].x + "," + selectedHex[1].y + ")"
 										+ '\n' + "Distance: "+ distance +" hexes";
 			}
-		}
-	}
-
-	public void MapOverlayVisible (bool state) {
-		mapOverlay.Visible = state;
-		if (state == true && hexOverlay.Count == 0) { //wow! dynamic loading!
-			PackedScene uIHex = GD.Load<PackedScene>("res://UIHex.tscn");
-			foreach (Vector2 hex in thisMapMgr.GetUsedHexes()) {
-				hexOverlay.Add (hex, (UIHex)uIHex.Instance());
-				mapOverlay.AddChild(hexOverlay[hex]);
-				hexOverlay[hex].Position = thisMapMgr.thisTileMap.MapToWorld(hex);
-				hexOverlay[hex].Prep(thisMapMgr,hex);
-			}
-			//FAR FUTURE TODO: draw hexagons over these hexagons
 		}
 	}
 

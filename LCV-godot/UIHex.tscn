@@ -19,6 +19,7 @@ margin_right = 94.32
 margin_bottom = 94.0
 
 [node name="CoordsLbl" type="Label" parent="CoordsCo"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_fonts/font = SubResource( 1 )
@@ -26,7 +27,6 @@ align = 1
 valign = 1
 
 [node name="Outline" type="Node2D" parent="CoordsCo"]
-visible = false
 
 [node name="Edge0" type="Line2D" parent="CoordsCo/Outline"]
 points = PoolVector2Array( 27.135, 0, 81.406, 0 )
