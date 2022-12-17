@@ -13,6 +13,7 @@ public class UIMgr : Node2D {
 	Dictionary<Vector2, UIHex> hexOverlay = new Dictionary<Vector2, UIHex>();
 
 	List<Vector2> selectedHex;
+	Vector2[] path = new Vector2[0];
 	bool mouseInUI;
 	bool windowsOpen;
 	
@@ -79,22 +80,22 @@ public class UIMgr : Node2D {
 
 		if (selectedHex.Count == 1) {
 			//dooon't think I can turn this into a switch statement. also good lord this is ugly...but it's well-structured? I think?
-			if (inputEvent.IsActionPressed("mapN")) {
+			if (inputEvent.IsActionPressed("mapU")) {
 				selectedHex[0] = OddQ.Neighbor((selectedHex[0]),0);
 			}
-			else if (inputEvent.IsActionPressed("mapNE")) {
+			else if (inputEvent.IsActionPressed("mapUR")) {
 				selectedHex[0] = OddQ.Neighbor((selectedHex[0]),1);			
 			}
-			else if (inputEvent.IsActionPressed("mapSE")) {
+			else if (inputEvent.IsActionPressed("mapDR")) {
 				selectedHex[0] = OddQ.Neighbor((selectedHex[0]),2);	
 			}
-			else if (inputEvent.IsActionPressed("mapS")) {
+			else if (inputEvent.IsActionPressed("mapD")) {
 				selectedHex[0] = OddQ.Neighbor((selectedHex[0]),3);	
 			}
-			else if (inputEvent.IsActionPressed("mapSW")) {
+			else if (inputEvent.IsActionPressed("mapDL")) {
 				selectedHex[0] = OddQ.Neighbor((selectedHex[0]),4);	
 			}
-			else if (inputEvent.IsActionPressed("mapNW")) {
+			else if (inputEvent.IsActionPressed("mapUL")) {
 				selectedHex[0] = OddQ.Neighbor((selectedHex[0]),5);	
 			}
 			updateSelectionUI();
@@ -124,33 +125,51 @@ public class UIMgr : Node2D {
 
 	void BackOneLevel()
 	{
-		//TODO: use a List to somehow record "actions taken" by the player, and then use this function to remove the latest step.
+		//TODO: use a List to record "actions taken" by the player, and then use this function to remove the latest step.
 		//later I'll incorporate BackOneStep too, for specific windows. Which will do substeps one at a time instead of stepping
 		//out of procedures.
 		while (selectedHex.Count != 0) {
-			hexOverlay[selectedHex[0]].selected=false;
+			hexOverlay[selectedHex[0]].OutlineVisible(false);
 			selectedHex.RemoveAt(0);
 		}
-		offsetCoordsLabel.Text = "Clicked hex coordinates go here.";
+		foreach (Vector2 i in path) {
+			hexOverlay[i].OutlineVisible(false); //TODO: maybe find a way to tally all highlighted hexes in one spot
+		}
+		updateSelectionUI();
 	}
 
 	void updateSelectionUI () {
-		foreach (Vector2 i in selectedHex) {
-			hexOverlay[i].selected=true;
-		}
-		if (selectedHex.Count < 2) {
-			offsetCoordsLabel.Text = ("(" + selectedHex[0].x + "," + selectedHex[0].y + ")");
-		}
-		else {
-			int distance = OddQ.Distance(selectedHex[0], selectedHex[1]);
-			if (distance == 1) {
+		switch(selectedHex.Count) {
+			case 1:
+				offsetCoordsLabel.Text = ("(" + selectedHex[0].x + "," + selectedHex[0].y + ")");
+				hexOverlay[selectedHex[0]].OutlineColour(Colors.Yellow);
+				hexOverlay[selectedHex[0]].OutlineVisible(true);
+				break;
+			case 2:
+				hexOverlay[selectedHex[0]].OutlineColour(Colors.Yellow);
+				hexOverlay[selectedHex[0]].OutlineVisible(true);
+				hexOverlay[selectedHex[1]].OutlineColour(Colors.Yellow);
+				hexOverlay[selectedHex[1]].OutlineVisible(true);
+				int distance = OddQ.Distance(selectedHex[0], selectedHex[1]);
 				offsetCoordsLabel.Text += '\n' + "(" + selectedHex[1].x + "," + selectedHex[1].y + ")"
-										+ '\n' + "Distance: "+ distance +" hex";
-			}
-			else {
-				offsetCoordsLabel.Text += '\n' + "(" + selectedHex[1].x + "," + selectedHex[1].y + ")"
-										+ '\n' + "Distance: "+ distance +" hexes";
-			}
+										+ '\n' + "Distance: " + distance;			
+				if (distance == 1) {
+					offsetCoordsLabel.Text += " hex";
+				}
+				else {
+					offsetCoordsLabel.Text += " hexes";
+				}
+				path = OddQ.Line(selectedHex[0],selectedHex[1],thisMapMgr); //minimally expensive but it does calculate distance a second time
+				foreach (Vector2 i in path) {
+					if (i != selectedHex[0] && i != selectedHex[1]) {
+						hexOverlay[i].OutlineColour(Colors.White);
+						hexOverlay[i].OutlineVisible(true);
+					}
+				}
+				break;
+			default:
+				offsetCoordsLabel.Text = "Clicked hex coordinates go here.";
+				break;
 		}
 	}
 

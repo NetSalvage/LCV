@@ -9,10 +9,13 @@ public class MapMgr : Node2D { //Manages the map, also provides all math functio
 	UIMgr thisUINode;
 
 	Vector2[] usedHexes;
+
+	public float hexRadius {get; private set;}
 	
 	public override void _Ready() {		
 		thisTileMap = this.GetNode<TileMap>("ExampleMap"); //TODO: figure out a way to get the map's name ahead of time. That probably goes in the scene loading the game.
 		usedHexes= new Vector2[0];
+		hexRadius = thisTileMap.CellSize.x*5/8; //in redblob"size" is largest radius of hexagon; hex width is 1.25x the width of the rectangular cells; divide by 2 to get radius
 	}
 
 	private void _Ready2(GameMgr mgr) {

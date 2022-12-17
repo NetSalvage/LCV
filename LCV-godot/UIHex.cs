@@ -13,8 +13,9 @@ public class UIHex : Node2D
     public Label coordsLbl {get; private set;}
     MapMgr thisMapMgr;
     Vector2 coords;
-    Line2D[] outline;
+    public Line2D[] outline {get; private set;}
     private bool _selected; //what a nightmare. thanks C#
+                            //TODO: replace this with an "int highlighted"; 0 is "visible=false", all others are "visible=true" + a colour
     public bool selected {
         get {
             return _selected;
@@ -44,6 +45,23 @@ public class UIHex : Node2D
             //setting sizes by code is a fun trick but not really worth it when I can make scenes ahead of time (and these controls are inscrutable)
     }
 
+    public void EdgeColour (int edge, Color colour) {
+        outline[edge].DefaultColor = colour;
+    }
+
+    public void EdgeVisible (int edge, bool vis) {
+        outline[edge].Visible = vis;
+    }
+    public void OutlineColour (Color colour) {
+        foreach (Line2D i in outline) {
+            i.DefaultColor = colour;
+        }
+    }
+    public void OutlineVisible (bool vis) {
+        foreach (Line2D i in outline) {
+            i.Visible = vis;
+        }
+    }
 
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.

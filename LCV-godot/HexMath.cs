@@ -1,10 +1,6 @@
 using Godot;
 
 namespace HexMath {
-	struct lineOddQ { //weirdly enough this will be the most straightforward way to do this
-		Vector2[] cell; //"start" will be vector2[0], "end" will be vector2[count-1]
-	}
-
     public static class OddQ {
 	/*	Namespaces are shortcuts, so OddQ is mostly shortcuts.
 		All math in HexMath is done in the "Cube" class, but users can input to OddQ.
@@ -18,11 +14,19 @@ namespace HexMath {
 	    	return(new Vector3 (q, r, -q-r));
 	    }
 
-		public static Vector2 Coords(Vector3 CubeCoords) {
-			float q = CubeCoords.x;
-			float r = CubeCoords.y + (q - ((int)q&1))/2;
+		public static Vector2 Coords(Vector3 cubeCoords) {
+			float q = cubeCoords.x;
+			float r = cubeCoords.y + (q - ((int)q&1))/2;
 			return(new Vector2 (q,r));
-		}		
+		}
+
+		public static Vector2[] Coords(Vector3[] cubeCoords) {
+			Vector2[] output = new Vector2[cubeCoords.Length];
+			for (int i = 0; i < output.Length; i++) {
+				output[i] = new Vector2 (cubeCoords[i].x, cubeCoords[i].y + (cubeCoords[i].x - ((int)cubeCoords[i].x&1))/2);
+			}
+			return(output);
+		}
 
 		public static int Distance(Vector2 start, Vector2 end) {
 			Vector3 start3 = CubeCoords(start);
@@ -34,26 +38,8 @@ namespace HexMath {
 			return(Coords(Cube.Neighbor(CubeCoords(hex),direction)));
 		}
 
-		public static Vector2[] Line(Vector2 start, Vector2 end, TileMap tileMap) {
-			//my logic makes this easiest with oddQ, so vector3 will be the "redirecting" function.
-			//FAR FUTURE: rewrite this to more naturally use a hex grid. Will probably need that TileMap supports hex grids.
-			Vector2[] lineOut = new Vector2 [(Cube.Distance(CubeCoords(start),CubeCoords(end)))];
-			//determine biases, then set prim and sec directions based on that.
-			Vector2 diff = end - start;
-			//handle potential edge cases
-
-			float angle = Mathf.Atan2(diff.y,diff.x); //this is in radians
-			int prim; //most common move direction. Integers match those in "Neighbor" function
-			int sec; //alternative move direction.
-
-			if (0 <= angle && angle < 30) { //either SE or NE, NE primary
-			}
-			else if (30 <= angle && angle < 60) { //either NE or N, NE primary
-			}
-			else if (60 <= angle && angle < 90) { //either NE or N, N primary
-			}
-
-			return(lineOut);
+		public static Vector2[] Line(Vector2 start, Vector2 end, MapMgr mgr) {
+			return(Coords( Cube.Line( CubeCoords(start),CubeCoords(end), mgr)));
 		}
     }
 
@@ -84,7 +70,6 @@ namespace HexMath {
 					return hex;
 			}
 		}
-
 		public static Vector3 FirstDiag(Vector3 hex, int direction) {
 			//Returns first hex "diagonally" from a given corner
 			switch (direction) {
@@ -106,119 +91,102 @@ namespace HexMath {
 					return hex;
 			}
 		}
-
-		public static Vector3[] Line(Vector3 start, Vector3 end, TileMap tileMap) {
-			/*teach yourself bresenham, then implement it:
-			https://zvold.blogspot.com/2010/01/bresenhams-line-drawing-algorithm-on_26.html
-			*/
+		public static Vector3[] Line(Vector3 start, Vector3 end, MapMgr mgr) {
 			//FAR FUTURE: rewrite this to more naturally use a hex grid. Will probably need that TileMap supports hex grids.
 			//Let's bias towards clockwise for "first moves" and "tiebreakers".
-			Vector3[] lineOut = new Vector3 [(Cube.Distance((start),(end)))];
+			Vector3[] lineOut = new Vector3 [Cube.Distance((start),(end))+1];
+			lineOut[0] = start;
+			lineOut[lineOut.Length-1] = end;
 			//determine biases, then set prim and sec directions based on that.
-			Vector3 diff = end - start;
-			
-			//check for "perfect" directions
-			if (diff.x == 0) { //vertical
-				if (diff.y > 0) { //"r" is larger, which means it's going down
-					//fill in lineOut with each hex in that vertical line. +R, -S each time.
-				} else {
-					//fill in lineOut. -R, +S each time.
-				}
-			}
-			else if (diff.x == -diff.y) { //UR or DL
-				if (diff.x > 0) { //going "right", so, UR
-					//fill in lineOut. +Q, -R each time.
-				} else {
-					//fill in lineOut. -Q, +R each time.
-				}
-			}
-			else if (diff.x == -diff.z) { //DR or UL
-				if (diff.x > 0) { //going "right", so, DR
-					//fill in lineOut. +Q, -S each time.
-				} else {
-					//fill in lineOut. -Q, +S each time.
-				}
-			}
-			else if (diff.y == diff.z) { //L or R
-				if (diff.y < 0) { //both are negative, so moving "right"
-					//fill in lineOut. Alternate between -R and -S. +Q each time. 
-				} else {
-					//fill in lineOut. Alternate between +R and +S. -Q each time.
-				}
-			}
-			else { //All other cases go in here.
-				//Start by determining the Two Possible Movement Directions.
-				int prim; //most common move direction. Integers match those in "Neighbor" function
-				int sec; //alternative move direction.
-				if (diff.x > 0) { //it goes somewhat R.
-					if (diff.y > 0) { //Each move is either DR or D.
-						if (-2*diff.y <= diff.z){ //abs(r) is half or more of abs(s), which means the line is equal or more "vertical".
-							prim = 3;
-							sec = 2;
-						} else {
-							prim = 2;
-							sec = 3;
-						}
-					} else { //Each move is either UR or U.
-						if (-2*diff.y > diff.z){ //abs(r) is more than half of abs(s), which means the line is more "vertical".
-							prim = 0;
-							sec = 1;
-						} else {
-							prim = 1;
-							sec = 0;
-						}
-					}
-				} else { //it goes somewhat L.
-					if (diff.y > 0) { //Each move is either DL or D.
-						if (-2*diff.y < diff.z){ //abs(r) is more than half of abs(s), which means the line is more "vertical".
-							prim = 3;
-							sec = 4;
-						} else {
-							prim = 4;
-							sec = 3;
-						}
-					} else { //Each move is either UL or U.
-						if (-2*diff.y >= diff.z){ //abs(r) is half or more of abs(s), which means the line is equal or more "vertical".
-							prim = 0;
-							sec = 5;
-						} else {
-							prim = 5;
-							sec = 0;
-						}
-					}
-				}
-				//Now we can assemble the line.
-				lineOut[0] = start;
-				Vector2 startCartesian = tileMap.MapToWorld(OddQ.Coords(start));
-				Vector3 nextCell;
-				Vector2 nextVertex;
-				Vector2 diffCartesian = tileMap.MapToWorld(OddQ.Coords(diff));
+			Vector3 diff = end - start; //displacement in cube coords
+
+			//Working through all possibilities, clockwise, starting at "directly north":
+			int prim = -1; //The more-clockwise movement direction.
+			int sec = -1; //The alternative.
+			if (diff.x == 0 && diff.y < 0) { //perfect direction: north
 				for (int i = 1; i < lineOut.Length-1; i++) {
-					nextVertex = startCartesian + (diffCartesian*i/(lineOut.Length));
-					//compare prim vs sec, the one closest to nextVertex is the next cell
-					//CONTINUE HERE
-					//lineOut[i] = nextCell; 
+					lineOut[i] = Cube.Neighbor(lineOut[i-1],0);						
 				}
-				lineOut[lineOut.Length] = end;
 				return lineOut;
 			}
-
-			/*if no perfect direction, we do this somewhere between redblob and bresenham:
-				-Draw a line in Cartesian space, from the center of the start hex to the center of the end hex.
-					More precisely, make a list of points, "line length" long,
-					where the start point is in the start hex, and the end point is in the end hex.  
-					We'll also be using the tilemap to get Cartesian coordinates for this.
-				-For each prospective hex in our line, we decide between two neighbors to move into.
-					We can determine which two neighbors to choose between based on
-					which "straight line" cases we're between (see above).
-				-Repeat until we have all hexes filled in.
-			*/
-
-			return(lineOut);
-
-
-			Vector3[] hexLine = new Vector3[3];
-			return hexLine;
+			else if (diff.x > 0) { //rightwards
+				if (diff.y < 0 && diff.z > 0) { //between "always U" and "always UR"
+					prim = 1;
+					sec = 0;
+				}
+				else if (diff.z == 0) { //always UR
+					for (int i = 1; i < lineOut.Length-1; i++) {
+						lineOut[i] = Cube.Neighbor(lineOut[i-1],1);						
+					}
+					return lineOut;
+				}
+				else if (diff.y < 0 && diff.z < 0) { //between "always UR" and "always DR"
+					prim = 2;
+					sec = 1;
+				}
+				else if (diff.y == 0) { //always DR
+					for (int i = 1; i < lineOut.Length-1; i++) {
+						lineOut[i] = Cube.Neighbor(lineOut[i-1],2);						
+					}
+					return lineOut;
+				}
+				else if (diff.y > 0 && diff.z < 0) { //between "always DR" and "always D"
+					prim = 3;
+					sec = 2;
+				}
+			}
+			else if (diff.x == 0 && diff.y > 0) { //always D
+				for (int i = 1; i < lineOut.Length-1; i++) {
+					lineOut[i] = Cube.Neighbor(lineOut[i-1],3);						
+				}
+				return lineOut;
+			}
+			else { //diff.x < 0, which means moving left
+				if (diff.y > 0 && diff.z < 0) { //between "always D" and "always DL"
+					prim = 4;
+					sec = 3;
+				}
+				else if (diff.z == 0) { //always DL
+					for (int i = 1; i < lineOut.Length-1; i++) {
+						lineOut[i] = Cube.Neighbor(lineOut[i-1],4);						
+					}
+					return lineOut;
+				}
+				else if (diff.y > 0 && diff.z > 0) { //between "always DL" and "always UL"
+					prim = 5;
+					sec = 4;
+				}
+				else if (diff.y == 0) { //always UL
+					for (int i = 1; i < lineOut.Length-1; i++) {
+						lineOut[i] = Cube.Neighbor(lineOut[i-1],5);						
+					}
+					return lineOut;
+				}
+				else if (diff.y < 0 && diff.z > 0) { //between "always UL" and "always U"
+					prim = 0;
+					sec = 5;
+				}
+			}
+			//If we didn't hit a "perfect direction", we now have to assemble the rest of the line.
+			Vector2 startCartesian = mgr.thisTileMap.MapToWorld(OddQ.Coords(start));
+			Vector2 diffCartesian = mgr.thisTileMap.MapToWorld(OddQ.Coords(diff));
+			//i think this is better memory management:
+			Vector3 primCube;
+			Vector2 primCartesian;
+			Vector2 nextVertex;
+			float distance;
+			for (int i = 1; i < lineOut.Length-1; i++) {
+				nextVertex = startCartesian + (diffCartesian*i/(lineOut.Length-1));
+				primCube = Neighbor(lineOut[i-1], prim);
+				primCartesian = mgr.thisTileMap.MapToWorld(OddQ.Coords(primCube));
+				distance = nextVertex.DistanceTo(primCartesian);
+				if (distance <= mgr.hexRadius) {
+					lineOut[i] = primCube;
+				} else {
+					lineOut[i] = Cube.Neighbor(lineOut[i-1],sec);
+				}
+			}
+			return lineOut;
 		}
 	}
 }
