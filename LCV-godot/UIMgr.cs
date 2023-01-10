@@ -13,11 +13,15 @@ public class UIMgr : Node2D {
 	Dictionary<Vector2, UIHex> hexOverlay = new Dictionary<Vector2, UIHex>();
 
 	List<Vector2> selectedHex;
-	Vector2 testOffsetCoords;
-	bool testCrashed;
+
 	Vector2[] path = new Vector2[0];
 	bool mouseInUI;
 	bool windowsOpen;
+
+
+	//map shift variables
+	int shiftDir = 6;
+	bool testCrashed;
 
 	//engine-facing stuff
 	public override void _Ready() {
@@ -51,10 +55,17 @@ public class UIMgr : Node2D {
 
 	//things that should happen only on press
 	public override void _Input(InputEvent inputEvent) {
+		//"_Input" is called by the engine, once per frame, for each InputEvent.
+		//InputEvents are created by pressing a button for the first time in that frame.
+
 		if (inputEvent.IsActionPressed("choose_0")) {
 			if (mouseInUI==false && windowsOpen == false && selectedHex.Count <2) {
-				selectedHex.Add(thisMapMgr.thisTileMap.WorldToMap(GetGlobalMousePosition()));
-				updateSelectionUI();
+				Vector2 coords = thisMapMgr.thisTileMap.WorldToMap(GetGlobalMousePosition());
+				if (HexExists(coords)) {
+					selectedHex.Add(coords);
+					updateSelectionUI();
+					return;
+				}
 			}
 		}
 		
@@ -66,23 +77,28 @@ public class UIMgr : Node2D {
 			else {
 				windowsOpen = false;
 			}
+			return;
 		}
 		
 		if (inputEvent.IsActionPressed("ui_cancel")) {
 			BackOneLevel();
+			return;
 		}
 
 		if (inputEvent.IsActionPressed("ui_maplabels")) {
 			foreach (KeyValuePair<Vector2, UIHex> i in hexOverlay) {
 				i.Value.coordsLbl.Visible=!i.Value.coordsLbl.Visible;
 			}
+			return;
 		}
 
-		if (selectedHex.Count == 1) {
-			//dooon't think I can turn this into a switch statement. also good lord this is ugly...but it's well-structured? I think?
-			//this currently uses the UI hex list for verification, instead of the actual map manager. Right now they should be equivalent, but in the far future this may become a problem.
-			testOffsetCoords=selectedHex[0];
-			testCrashed = false;
+		MapShift(inputEvent);
+	}
+
+	void MapShift(InputEvent inputEvent) {
+		//handles all shifting of selected hexes according to numpad inputs. There's a lot of overlapping stuff here that deserved its own function for organization's sake.
+		if (selectedHex.Count > 0) {
+			Vector2 testOffsetCoords=selectedHex[selectedHex.Count-1];
 			if (inputEvent.IsActionPressed("mapU")) {
 				testOffsetCoords = OddQ.Neighbor((testOffsetCoords),0);
 			}
@@ -102,21 +118,26 @@ public class UIMgr : Node2D {
 				testOffsetCoords = OddQ.Neighbor((testOffsetCoords),5);	
 			}
 
-			try {
-				UIHex testHex = hexOverlay[testOffsetCoords];
-			}
-			catch {
-				testCrashed = true;
-			}
-			finally {
-				if (!testCrashed) {
-					Deselect(selectedHex[0]);
-					selectedHex[0] = testOffsetCoords;
-					updateSelectionUI();
+			if (testOffsetCoords != selectedHex[selectedHex.Count-1]) {
+				if (selectedHex.Count == 1) {
+					testCrashed = false;
+					try {
+						UIHex testHex = hexOverlay[testOffsetCoords];
+					}
+					catch {
+						testCrashed = true;
+					}
+					finally {
+						if (!testCrashed) {
+							Deselect(selectedHex[0]);
+							selectedHex[0] = testOffsetCoords;
+							updateSelectionUI();
+						}
+					}
 				}
+				//else if (selectedHex.Count == 2) {
 			}
 		}
-
 	}
 	
 	void LongInputCheck(float delta) {
@@ -200,5 +221,18 @@ public class UIMgr : Node2D {
 
 	private void OnMouseOutUI() {
 		mouseInUI = false;
+	}
+
+	bool HexExists(Vector2 hex) {
+		//Not sure how I feel about my error-checking being dependent on the UIHex list.
+		//However, it's much faster than checkign the entire hex list for the hex in question.
+		bool result = true;
+		try {
+			UIHex testHex = hexOverlay[hex];
+		}
+		catch {
+			result = false;
+		}		
+		return result;
 	}
 }
