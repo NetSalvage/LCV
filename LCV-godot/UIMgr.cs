@@ -92,12 +92,8 @@ public class UIMgr : Node2D {
 			return;
 		}
 
-		MapShift(inputEvent);
-	}
-
-	void MapShift(InputEvent inputEvent) {
-		//handles all shifting of selected hexes according to numpad inputs. There's a lot of overlapping stuff here that deserved its own function for organization's sake.
-		if (selectedHex.Count > 0) {
+		//handles any map-shifting inputs
+				if (selectedHex.Count > 0) {
 			Vector2 testOffsetCoords=selectedHex[selectedHex.Count-1];
 			if (inputEvent.IsActionPressed("mapU")) {
 				testOffsetCoords = OddQ.Neighbor((testOffsetCoords),0);
