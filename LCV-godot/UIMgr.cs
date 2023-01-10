@@ -110,6 +110,7 @@ public class UIMgr : Node2D {
 			}
 			finally {
 				if (!testCrashed) {
+					Deselect(selectedHex[0]);
 					selectedHex[0] = testOffsetCoords;
 					updateSelectionUI();
 				}
