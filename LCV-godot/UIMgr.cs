@@ -13,11 +13,11 @@ public class UIMgr : Node2D {
 	Dictionary<Vector2, UIHex> hexOverlay = new Dictionary<Vector2, UIHex>();
 
 	List<Vector2> selectedHex;
+	Vector2 testOffsetCoords;
+	bool testCrashed;
 	Vector2[] path = new Vector2[0];
 	bool mouseInUI;
 	bool windowsOpen;
-	
-	Vector2 hexCoords; //map coords and world coords both use vector2, so...
 
 	//engine-facing stuff
 	public override void _Ready() {
@@ -80,25 +80,40 @@ public class UIMgr : Node2D {
 
 		if (selectedHex.Count == 1) {
 			//dooon't think I can turn this into a switch statement. also good lord this is ugly...but it's well-structured? I think?
+			//this currently uses the UI hex list for verification, instead of the actual map manager. Right now they should be equivalent, but in the far future this may become a problem.
+			testOffsetCoords=selectedHex[0];
+			testCrashed = false;
 			if (inputEvent.IsActionPressed("mapU")) {
-				selectedHex[0] = OddQ.Neighbor((selectedHex[0]),0);
+				testOffsetCoords = OddQ.Neighbor((testOffsetCoords),0);
 			}
 			else if (inputEvent.IsActionPressed("mapUR")) {
-				selectedHex[0] = OddQ.Neighbor((selectedHex[0]),1);			
+				testOffsetCoords = OddQ.Neighbor((testOffsetCoords),1);			
 			}
 			else if (inputEvent.IsActionPressed("mapDR")) {
-				selectedHex[0] = OddQ.Neighbor((selectedHex[0]),2);	
+				testOffsetCoords = OddQ.Neighbor((testOffsetCoords),2);	
 			}
 			else if (inputEvent.IsActionPressed("mapD")) {
-				selectedHex[0] = OddQ.Neighbor((selectedHex[0]),3);	
+				testOffsetCoords = OddQ.Neighbor((testOffsetCoords),3);	
 			}
 			else if (inputEvent.IsActionPressed("mapDL")) {
-				selectedHex[0] = OddQ.Neighbor((selectedHex[0]),4);	
+				testOffsetCoords = OddQ.Neighbor((testOffsetCoords),4);	
 			}
 			else if (inputEvent.IsActionPressed("mapUL")) {
-				selectedHex[0] = OddQ.Neighbor((selectedHex[0]),5);	
+				testOffsetCoords = OddQ.Neighbor((testOffsetCoords),5);	
 			}
-			updateSelectionUI();
+
+			try {
+				UIHex testHex = hexOverlay[testOffsetCoords];
+			}
+			catch {
+				testCrashed = true;
+			}
+			finally {
+				if (!testCrashed) {
+					selectedHex[0] = testOffsetCoords;
+					updateSelectionUI();
+				}
+			}
 		}
 
 	}
@@ -129,15 +144,19 @@ public class UIMgr : Node2D {
 		//later I'll incorporate BackOneStep too, for specific windows. Which will do substeps one at a time instead of stepping
 		//out of procedures.
 		while (selectedHex.Count != 0) {
-			hexOverlay[selectedHex[0]].OutlineVisible(false);
+			Deselect(selectedHex[0]);
 			selectedHex.RemoveAt(0);
 		}
 		foreach (Vector2 i in path) {
-			hexOverlay[i].OutlineVisible(false); //TODO: maybe find a way to tally all highlighted hexes in one spot
+			Deselect(i);
 		}
 		updateSelectionUI();
 	}
 
+	void Deselect(Vector2 hex) {
+		hexOverlay[hex].OutlineVisible(false);
+	}
+	
 	void updateSelectionUI () {
 		switch(selectedHex.Count) {
 			case 1:
