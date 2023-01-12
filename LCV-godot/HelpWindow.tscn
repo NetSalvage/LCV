@@ -33,8 +33,8 @@ Primary mouse button: Select a hex.
 ESC: Cancel selection.
 L: Toggle display of hex coordinates.
 
-With ONE hex selected:
-Num4 - num9: Change selected hex."
+With any number of hexes selected...
+Num4 - num9: Change last-selected hex."
 align = 1
 valign = 1
 

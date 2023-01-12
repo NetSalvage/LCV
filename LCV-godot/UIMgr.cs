@@ -19,9 +19,7 @@ public class UIMgr : Node2D {
 	bool windowsOpen;
 
 
-	//map shift variables
-	int shiftDir = 6;
-	bool testCrashed;
+		
 
 	//engine-facing stuff
 	public override void _Ready() {
@@ -93,7 +91,7 @@ public class UIMgr : Node2D {
 		}
 
 		//handles any map-shifting inputs
-				if (selectedHex.Count > 0) {
+		if (selectedHex.Count > 0) {
 			Vector2 testOffsetCoords=selectedHex[selectedHex.Count-1];
 			if (inputEvent.IsActionPressed("mapU")) {
 				testOffsetCoords = OddQ.Neighbor((testOffsetCoords),0);
@@ -115,20 +113,23 @@ public class UIMgr : Node2D {
 			}
 
 			if (testOffsetCoords != selectedHex[selectedHex.Count-1]) {
-				if (selectedHex.Count == 1) {
-					testCrashed = false;
-					try {
-						UIHex testHex = hexOverlay[testOffsetCoords];
+				bool testCrashed = false;
+				try {
+					UIHex testHex = hexOverlay[testOffsetCoords];
+				}
+				catch {
+					testCrashed = true;
+				}
+				if (!testCrashed) {
+					if (selectedHex.Count == 1) {
+						Deselect(selectedHex[0]);
+						selectedHex[0] = testOffsetCoords;
+						updateSelectionUI();
 					}
-					catch {
-						testCrashed = true;
-					}
-					finally {
-						if (!testCrashed) {
-							Deselect(selectedHex[0]);
-							selectedHex[0] = testOffsetCoords;
-							updateSelectionUI();
-						}
+					else {
+						Deselect(selectedHex[1]); 
+						selectedHex[1] = testOffsetCoords;
+						updateSelectionUI();
 					}
 				}
 				//else if (selectedHex.Count == 2) {
@@ -176,20 +177,25 @@ public class UIMgr : Node2D {
 	}
 	
 	void updateSelectionUI () {
-		switch(selectedHex.Count) {
-			case 1:
-				offsetCoordsLabel.Text = ("(" + selectedHex[0].x + "," + selectedHex[0].y + ")");
-				hexOverlay[selectedHex[0]].OutlineColour(Colors.Yellow);
-				hexOverlay[selectedHex[0]].OutlineVisible(true);
-				break;
-			case 2:
+		if (selectedHex.Count == 0) {
+			offsetCoordsLabel.Text = "Clicked hex coordinates go here.";
+		}
+		else {
+			offsetCoordsLabel.Text = ("(" + selectedHex[0].x + "," + selectedHex[0].y + ")");
+			hexOverlay[selectedHex[0]].OutlineColour(Colors.Yellow);
+			hexOverlay[selectedHex[0]].OutlineVisible(true);
+			if (selectedHex.Count > 1) {
+				foreach (Vector2 i in path) {
+					Deselect(i);
+				}
 				hexOverlay[selectedHex[0]].OutlineColour(Colors.Yellow);
 				hexOverlay[selectedHex[0]].OutlineVisible(true);
 				hexOverlay[selectedHex[1]].OutlineColour(Colors.Yellow);
 				hexOverlay[selectedHex[1]].OutlineVisible(true);
 				int distance = OddQ.Distance(selectedHex[0], selectedHex[1]);
 				offsetCoordsLabel.Text += '\n' + "(" + selectedHex[1].x + "," + selectedHex[1].y + ")"
-										+ '\n' + "Distance: " + distance;			
+										+ '\n' + "Distance: " + distance;
+
 				if (distance == 1) {
 					offsetCoordsLabel.Text += " hex";
 				}
@@ -203,10 +209,7 @@ public class UIMgr : Node2D {
 						hexOverlay[i].OutlineVisible(true);
 					}
 				}
-				break;
-			default:
-				offsetCoordsLabel.Text = "Clicked hex coordinates go here.";
-				break;
+			}
 		}
 	}
 
@@ -221,7 +224,7 @@ public class UIMgr : Node2D {
 
 	bool HexExists(Vector2 hex) {
 		//Not sure how I feel about my error-checking being dependent on the UIHex list.
-		//However, it's much faster than checkign the entire hex list for the hex in question.
+		//However, it's much faster than checking the entire hex list for the hex in question.
 		bool result = true;
 		try {
 			UIHex testHex = hexOverlay[hex];

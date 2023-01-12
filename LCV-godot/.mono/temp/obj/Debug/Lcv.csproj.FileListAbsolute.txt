@@ -43,3 +43,12 @@ C:\Users\otuy9\OneDrive\Documents\Git\LCV\LCV-godot\.mono\temp\obj\Debug\Lcv.Ass
 C:\Users\otuy9\OneDrive\Documents\Git\LCV\LCV-godot\.mono\temp\obj\Debug\Lcv.csproj.CoreCompileInputs.cache
 C:\Users\otuy9\OneDrive\Documents\Git\LCV\LCV-godot\.mono\temp\obj\Debug\Lcv.dll
 C:\Users\otuy9\OneDrive\Documents\Git\LCV\LCV-godot\.mono\temp\obj\Debug\Lcv.pdb
+A:\Documents\github\LCV-godot\.mono\temp\bin\Debug\Lcv.dll
+A:\Documents\github\LCV-godot\.mono\temp\bin\Debug\Lcv.pdb
+A:\Documents\github\LCV-godot\.mono\temp\obj\Debug\Lcv.csproj.AssemblyReference.cache
+A:\Documents\github\LCV-godot\.mono\temp\obj\Debug\Lcv.GeneratedMSBuildEditorConfig.editorconfig
+A:\Documents\github\LCV-godot\.mono\temp\obj\Debug\Lcv.AssemblyInfoInputs.cache
+A:\Documents\github\LCV-godot\.mono\temp\obj\Debug\Lcv.AssemblyInfo.cs
+A:\Documents\github\LCV-godot\.mono\temp\obj\Debug\Lcv.csproj.CoreCompileInputs.cache
+A:\Documents\github\LCV-godot\.mono\temp\obj\Debug\Lcv.dll
+A:\Documents\github\LCV-godot\.mono\temp\obj\Debug\Lcv.pdb
