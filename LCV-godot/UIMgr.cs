@@ -12,12 +12,14 @@ public class UIMgr : Node2D {
 	CanvasLayer mapOverlay;
 	Dictionary<Vector2, UIHex> hexOverlay = new Dictionary<Vector2, UIHex>();
 
-	List<Vector2> selectedHex;
-
-	Vector2[] path = new Vector2[0];
 	bool mouseInUI;
 	bool windowsOpen;
 
+	//information stored in the UI
+	List<Vector2> selectedHex;
+	Vector2[] path = new Vector2[0];
+	List<Vector2> area = new List<Vector2>();
+	bool areaVisible = false;
 
 		
 
@@ -90,7 +92,6 @@ public class UIMgr : Node2D {
 			return;
 		}
 
-		//handles any map-shifting inputs
 		if (selectedHex.Count > 0) {
 			Vector2 testOffsetCoords=selectedHex[selectedHex.Count-1];
 			if (inputEvent.IsActionPressed("mapU")) {
@@ -133,6 +134,11 @@ public class UIMgr : Node2D {
 					}
 				}
 				//else if (selectedHex.Count == 2) {
+			}
+
+			if (inputEvent.IsActionPressed("selection_area")) {
+				areaVisible = !areaVisible;
+				updateSelectionUI();
 			}
 		}
 	}
@@ -177,6 +183,8 @@ public class UIMgr : Node2D {
 	}
 	
 	void updateSelectionUI () {
+		//updates the appearance of hexes based on whether or not they're selected.
+		//Also (currently) updates the "area" shown.
 		if (selectedHex.Count == 0) {
 			offsetCoordsLabel.Text = "Clicked hex coordinates go here.";
 		}
@@ -208,6 +216,47 @@ public class UIMgr : Node2D {
 						hexOverlay[i].OutlineColour(Colors.White);
 						hexOverlay[i].OutlineVisible(true);
 					}
+				}
+			}
+		}
+
+		//handle Area display
+		foreach (Vector2 i in area) {
+			if (!selectedHex.Contains(i)) {
+				bool remove = true;
+				foreach (Vector2 j in path) {
+					if (j == i) {
+						remove = false;
+					}
+				}
+				if (remove) {
+					hexOverlay[i].OutlineVisible(false);
+				}
+			}
+			//TODO: Convert hexmath functions to use lists; use lists everywhere; then you can just do "if !selectedHex.Contains(i) && !path.Contains(i)".
+		}
+
+		area.Clear();
+		if (selectedHex.Count == 2) {
+			//Displays all hexes within [distance] radius of the starting hex.
+			if (areaVisible) {
+				foreach (Vector2 i in HexMath.OddQ.Area(selectedHex[0], OddQ.Distance(selectedHex[0], selectedHex[1]))) {
+					if (i != selectedHex[0] && i != selectedHex[1]) {
+						bool valid = true;
+						foreach (Vector2 j in path) {
+							if (i == j || HexExists(i) == false) {
+								valid = false;
+								break;
+							}
+						}
+						if (valid) {
+							area.Add(i);
+						}
+					}
+				}
+				foreach (Vector2 i in area) {
+					hexOverlay[i].OutlineColour(Colors.Gray);
+					hexOverlay[i].OutlineVisible(true);
 				}
 			}
 		}

@@ -1,4 +1,5 @@
 using Godot;
+using System.Collections.Generic;
 
 namespace HexMath {
     public static class OddQ {
@@ -34,6 +35,10 @@ namespace HexMath {
 			return(Cube.Distance(start3, end3));
 		}
 
+		public static Vector2[] Area(Vector2 start, int radius) {
+			return(Coords( Cube.Area( CubeCoords(start),radius)));
+		}
+
 		public static Vector2 Neighbor(Vector2 hex, int direction){
 			return(Coords(Cube.Neighbor(CubeCoords(hex),direction)));
 		}
@@ -51,6 +56,27 @@ namespace HexMath {
 			*/
 			return ((int) ( (Mathf.Abs(end.x - start.x) + Mathf.Abs(end.y - start.y) + Mathf.Abs(end.z - start.z))/2 ) );
 		}
+
+		public static Vector3[] Area(Vector3 start, int radius) {
+			var hexList = new List<Vector3>();
+			//TODO: make this loop better, follow step 2 in redblob
+			for (int i = radius*-1; i <= radius; i++) {
+				for (int j = radius*-1; j<= radius; j++) {
+					for (int k = radius*-1; k<= radius; k++) {
+						if (i + j + k == 0) {
+							Vector3 displ = new Vector3(i,j,k);
+							hexList.Add(start + displ);
+						}
+					}
+				}
+			}
+			Vector3[] arr = new Vector3[hexList.Count];
+			for (int i = 0; i < hexList.Count; i++) {
+				arr[i] = hexList[i];
+			}
+			return arr;
+		}
+
 		public static Vector3 Neighbor(Vector3 hex, int direction){
 			switch (direction) {
 				case 0:
