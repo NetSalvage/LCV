@@ -21,10 +21,10 @@ namespace HexMath {
 			return(new Vector2 (q,r));
 		}
 
-		public static Vector2[] Coords(Vector3[] cubeCoords) {
-			Vector2[] output = new Vector2[cubeCoords.Length];
-			for (int i = 0; i < output.Length; i++) {
-				output[i] = new Vector2 (cubeCoords[i].x, cubeCoords[i].y + (cubeCoords[i].x - ((int)cubeCoords[i].x&1))/2);
+		public static List<Vector2> Coords(List<Vector3> cubeCoords) {
+			List<Vector2> output = new List<Vector2>();
+			foreach (Vector3 i in cubeCoords) {
+				output.Add (new Vector2 (i.x, i.y + (i.x - ((int)i.x&1))/2) );
 			}
 			return(output);
 		}
@@ -35,7 +35,7 @@ namespace HexMath {
 			return(Cube.Distance(start3, end3));
 		}
 
-		public static Vector2[] Area(Vector2 start, int radius) {
+		public static List<Vector2> Area(Vector2 start, int radius) {
 			return(Coords( Cube.Area( CubeCoords(start),radius)));
 		}
 
@@ -43,7 +43,7 @@ namespace HexMath {
 			return(Coords(Cube.Neighbor(CubeCoords(hex),direction)));
 		}
 
-		public static Vector2[] Line(Vector2 start, Vector2 end, MapMgr mgr) {
+		public static List<Vector2> Line(Vector2 start, Vector2 end, MapMgr mgr) {
 			return(Coords( Cube.Line( CubeCoords(start),CubeCoords(end), mgr)));
 		}
     }
@@ -52,12 +52,12 @@ namespace HexMath {
 		public static int Distance(Vector3 start, Vector3 end) {
 			/*	Using Manhattan distances on a hex grid, this returns the number of hexes that you would have to exit
 				in order to enter the "end" hex.
-				For the Manhattan distance BETWEEN these two hexes, simply subtract 1 from this result.
+				For the Manhattan distanceCartesian BETWEEN these two hexes, simply subtract 1 from this result.
 			*/
 			return ((int) ( (Mathf.Abs(end.x - start.x) + Mathf.Abs(end.y - start.y) + Mathf.Abs(end.z - start.z))/2 ) );
 		}
 
-		public static Vector3[] Area(Vector3 start, int radius) {
+		public static List<Vector3> Area(Vector3 start, int radius) {
 			var hexList = new List<Vector3>();
 			//TODO: make this loop better, follow step 2 in redblob
 			for (int i = radius*-1; i <= radius; i++) {
@@ -70,9 +70,9 @@ namespace HexMath {
 					}
 				}
 			}
-			Vector3[] arr = new Vector3[hexList.Count];
+			List<Vector3> arr = new List<Vector3>();
 			for (int i = 0; i < hexList.Count; i++) {
-				arr[i] = hexList[i];
+				arr.Add(hexList[i]);
 			}
 			return arr;
 		}
@@ -117,12 +117,11 @@ namespace HexMath {
 					return hex;
 			}
 		}
-		public static Vector3[] Line(Vector3 start, Vector3 end, MapMgr mgr) {
+		public static List<Vector3> Line(Vector3 start, Vector3 end, MapMgr mgr) {
 			//FAR FUTURE: rewrite this to more naturally use a hex grid. Will probably need that TileMap supports hex grids.
 			//Let's bias towards clockwise for "first moves" and "tiebreakers".
-			Vector3[] lineOut = new Vector3 [Cube.Distance((start),(end))+1];
-			lineOut[0] = start;
-			lineOut[lineOut.Length-1] = end;
+			List<Vector3> lineOut = new List<Vector3>();
+			lineOut.Add(start);
 			//determine biases, then set prim and sec directions based on that.
 			Vector3 diff = end - start; //displacement in cube coords
 
@@ -130,9 +129,10 @@ namespace HexMath {
 			int prim = -1; //The more-clockwise movement direction.
 			int sec = -1; //The alternative.
 			if (diff.x == 0 && diff.y < 0) { //perfect direction: north
-				for (int i = 1; i < lineOut.Length-1; i++) {
+				for (int i = 1; i < lineOut.Count-1; i++) {
 					lineOut[i] = Cube.Neighbor(lineOut[i-1],0);						
 				}
+				lineOut.Add(end);				
 				return lineOut;
 			}
 			else if (diff.x > 0) { //rightwards
@@ -141,9 +141,10 @@ namespace HexMath {
 					sec = 0;
 				}
 				else if (diff.z == 0) { //always UR
-					for (int i = 1; i < lineOut.Length-1; i++) {
+					for (int i = 1; i < lineOut.Count-1; i++) {
 						lineOut[i] = Cube.Neighbor(lineOut[i-1],1);						
 					}
+					lineOut.Add(end);
 					return lineOut;
 				}
 				else if (diff.y < 0 && diff.z < 0) { //between "always UR" and "always DR"
@@ -151,9 +152,10 @@ namespace HexMath {
 					sec = 1;
 				}
 				else if (diff.y == 0) { //always DR
-					for (int i = 1; i < lineOut.Length-1; i++) {
+					for (int i = 1; i < lineOut.Count-1; i++) {
 						lineOut[i] = Cube.Neighbor(lineOut[i-1],2);						
 					}
+					lineOut.Add(end);
 					return lineOut;
 				}
 				else if (diff.y > 0 && diff.z < 0) { //between "always DR" and "always D"
@@ -162,9 +164,10 @@ namespace HexMath {
 				}
 			}
 			else if (diff.x == 0 && diff.y > 0) { //always D
-				for (int i = 1; i < lineOut.Length-1; i++) {
+				for (int i = 1; i < lineOut.Count-1; i++) {
 					lineOut[i] = Cube.Neighbor(lineOut[i-1],3);						
 				}
+				lineOut.Add(end);
 				return lineOut;
 			}
 			else { //diff.x < 0, which means moving left
@@ -173,9 +176,10 @@ namespace HexMath {
 					sec = 3;
 				}
 				else if (diff.z == 0) { //always DL
-					for (int i = 1; i < lineOut.Length-1; i++) {
+					for (int i = 1; i < lineOut.Count-1; i++) {
 						lineOut[i] = Cube.Neighbor(lineOut[i-1],4);						
 					}
+					lineOut.Add(end);
 					return lineOut;
 				}
 				else if (diff.y > 0 && diff.z > 0) { //between "always DL" and "always UL"
@@ -183,9 +187,10 @@ namespace HexMath {
 					sec = 4;
 				}
 				else if (diff.y == 0) { //always UL
-					for (int i = 1; i < lineOut.Length-1; i++) {
+					for (int i = 1; i < lineOut.Count-1; i++) {
 						lineOut[i] = Cube.Neighbor(lineOut[i-1],5);						
 					}
+					lineOut.Add(end);
 					return lineOut;
 				}
 				else if (diff.y < 0 && diff.z > 0) { //between "always UL" and "always U"
@@ -197,21 +202,37 @@ namespace HexMath {
 			Vector2 startCartesian = mgr.thisTileMap.MapToWorld(OddQ.Coords(start));
 			Vector2 diffCartesian = mgr.thisTileMap.MapToWorld(OddQ.Coords(diff));
 			//i think this is better memory management:
+			int distanceMap = Distance(start,end);
+			Vector2 nextVertex = startCartesian + (diffCartesian/(distanceMap));
+			int step = 1;
 			Vector3 primCube;
 			Vector2 primCartesian;
-			Vector2 nextVertex;
-			float distance;
-			for (int i = 1; i < lineOut.Length-1; i++) {
-				nextVertex = startCartesian + (diffCartesian*i/(lineOut.Length-1));
+			float distanceCartesian;
+			Vector2 endQ = OddQ.Coords(end);
+			while (step < distanceMap) {
+				primCube = Neighbor(lineOut[step-1], prim);
+				primCartesian = mgr.thisTileMap.MapToWorld(OddQ.Coords(primCube));
+				distanceCartesian = nextVertex.DistanceTo(primCartesian);
+				if (distanceCartesian <= mgr.hexRadius) {
+					lineOut.Add(primCube);
+				} else {
+					lineOut.Add(Cube.Neighbor(lineOut[step-1],sec));
+				}
+				step += 1;
+				nextVertex = startCartesian + (diffCartesian*step/(distanceMap));
+			}
+/*			for (int i = 1; i < lineOut.Count-1; i++) {
+				nextVertex = startCartesian + (diffCartesian*i/(lineOut.Count-1));
 				primCube = Neighbor(lineOut[i-1], prim);
 				primCartesian = mgr.thisTileMap.MapToWorld(OddQ.Coords(primCube));
-				distance = nextVertex.DistanceTo(primCartesian);
-				if (distance <= mgr.hexRadius) {
+				distanceCartesian = nextVertex.DistanceTo(primCartesian);
+				if (distanceCartesian <= mgr.hexRadius) {
 					lineOut[i] = primCube;
 				} else {
 					lineOut[i] = Cube.Neighbor(lineOut[i-1],sec);
 				}
-			}
+			}*/
+			lineOut.Add(end);
 			return lineOut;
 		}
 	}

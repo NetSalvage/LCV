@@ -17,7 +17,7 @@ public class UIMgr : Node2D {
 
 	//information stored in the UI
 	List<Vector2> selectedHex;
-	Vector2[] path = new Vector2[0];
+	List<Vector2> path = new List<Vector2>();
 	List<Vector2> area = new List<Vector2>();
 	bool areaVisible = false;
 
@@ -210,7 +210,9 @@ public class UIMgr : Node2D {
 				else {
 					offsetCoordsLabel.Text += " hexes";
 				}
-				path = OddQ.Line(selectedHex[0],selectedHex[1],thisMapMgr); //minimally expensive but it does calculate distance a second time
+				path = OddQ.Line(selectedHex[0],selectedHex[1],thisMapMgr);
+				//"path" is not filling up with entries.
+				//Cube.Line works, but OddQ.Line is not returning the list.
 				foreach (Vector2 i in path) {
 					if (i != selectedHex[0] && i != selectedHex[1]) {
 						hexOverlay[i].OutlineColour(Colors.White);
