@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "9eCy1+o/rnOEeWokshhMdX1pDm7G9igPLM86K/VrW5eTTx4ODuZ9wDLoZf7Izbeu54qhQr0yTVAT0cY05qoYMQ==",
+  "dgSpecHash": "jt7PPzEkdcB33ACdvIZIRcOwZdc/DwcNyRnF3wdjRbsScPv/9OvctnSACDXpbf/a6VsqXUpUDBiq6RYc+jgiOg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\otuy9\\OneDrive\\Documents\\Git\\LCV\\LCV-godot\\Lcv.csproj",
+  "projectFilePath": "A:\\Documents\\github\\LCV-godot\\Lcv.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\otuy9\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.2\\microsoft.netframework.referenceassemblies.1.0.2.nupkg.sha512",
-    "C:\\Users\\otuy9\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net472\\1.0.2\\microsoft.netframework.referenceassemblies.net472.1.0.2.nupkg.sha512"
+    "C:\\Users\\Ogres\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.2\\microsoft.netframework.referenceassemblies.1.0.2.nupkg.sha512",
+    "C:\\Users\\Ogres\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net472\\1.0.2\\microsoft.netframework.referenceassemblies.net472.1.0.2.nupkg.sha512"
   ],
   "logs": []
 }

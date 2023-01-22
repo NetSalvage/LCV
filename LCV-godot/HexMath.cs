@@ -59,22 +59,15 @@ namespace HexMath {
 
 		public static List<Vector3> Area(Vector3 start, int radius) {
 			var hexList = new List<Vector3>();
-			//TODO: make this loop better, follow step 2 in redblob
-			for (int i = radius*-1; i <= radius; i++) {
-				for (int j = radius*-1; j<= radius; j++) {
-					for (int k = radius*-1; k<= radius; k++) {
-						if (i + j + k == 0) {
-							Vector3 displ = new Vector3(i,j,k);
-							hexList.Add(start + displ);
-						}
-					}
+			int s;
+			for (int q = -radius; q <= radius; q++) {
+				for ( int r = Mathf.Max(-radius, (-q)-radius); r<= Mathf.Min(radius, (-q)+radius); r++) { //I do not know how this works, but it is basically a "factored" version of another calculation
+					s = -q-r;
+					Vector3 displ = new Vector3(q,r,s);
+					hexList.Add(start + displ);
 				}
 			}
-			List<Vector3> arr = new List<Vector3>();
-			for (int i = 0; i < hexList.Count; i++) {
-				arr.Add(hexList[i]);
-			}
-			return arr;
+			return hexList;
 		}
 
 		public static Vector3 Neighbor(Vector3 hex, int direction){
